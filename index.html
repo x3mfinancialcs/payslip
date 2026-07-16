@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>X3M Financial Consultancy Services Payslip</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#17130f;
+    --ink-soft:#332c24;
+    --gold:#c9992f;
+    --gold-deep:#8a6d1f;
+    --gold-pale:#ecd9ad;
+    --red:#ab1f34;
+    --paper:#faf7f1;
+    --paper-dim:#f1ece1;
+    --line:#e2d9c6;
+    --grey:#726b60;
+    --white:#ffffff;
+    --radius:2px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  ::selection{background:var(--gold-pale);}
+
+  /* ---------- Header ---------- */
+  .topbar{
+    background:var(--ink);
+    color:var(--white);
+    padding:18px 32px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-bottom:3px solid var(--gold);
+  }
+  .brand{display:flex;align-items:center;gap:14px;}
+  .brand img{width:42px;height:42px;display:block;}
+  .brand-text h1{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:19px;
+    letter-spacing:0.3px;
+    margin:0;
+  }
+  .brand-text p{
+    margin:2px 0 0;
+    font-size:11.5px;
+    color:var(--gold-pale);
+    letter-spacing:0.5px;
+    text-transform:uppercase;
+  }
+  .topbar-note{
+    font-size:11.5px;
+    color:#c9c2b5;
+    text-align:right;
+    max-width:260px;
+    line-height:1.4;
+  }
+  .topbar-note a{color:#c9c2b5;cursor:pointer;text-decoration:underline;font-size:11px;}
+
+  /* ---------- Auth Overlay ---------- */
+  .auth-overlay{
+    position:fixed;inset:0;
+    background:rgba(23,19,15,0.92);
+    display:flex;align-items:center;justify-content:center;
+    z-index:1000;padding:20px;
+  }
+  .auth-card{
+    background:var(--paper);color:var(--ink);
+    width:380px;max-width:100%;padding:32px;
+    border-radius:var(--radius);
+    box-shadow:0 10px 40px rgba(0,0,0,.5);
+  }
+  .auth-card h2{font-family:'Fraunces',serif;margin:0 0 6px;font-size:19px;}
+  .auth-sub{font-size:12px;color:var(--grey);margin:0 0 18px;}
+  .auth-note{font-size:11px;color:var(--grey);margin-top:16px;line-height:1.5;}
+  .auth-msg{display:none;padding:8px 10px;font-size:12.5px;border-radius:var(--radius);margin-bottom:14px;}
+  .auth-msg.show{display:block;}
+  .auth-msg.err{background:#fbeaea;color:var(--red);border:1px solid #f0c6cb;}
+  .auth-msg.ok{background:#eaf4ea;color:#2c6b2f;border:1px solid #bfe0c0;}
+  .auth-links{margin-top:12px;font-size:12px;text-align:center;}
+  .auth-links a{color:var(--gold-deep);cursor:pointer;text-decoration:underline;}
+  .app-hidden{display:none !important;}
+
+  /* ---------- Layout ---------- */
+  .app{
+    display:grid;
+    grid-template-columns:270px 1fr 400px;
+    gap:0;
+    align-items:start;
+    min-height:calc(100vh - 78px);
+  }
+  .panel{padding:24px;}
+  .roster{
+    border-right:1px solid var(--line);
+    background:var(--paper-dim);
+  }
+  .workspace{border-right:1px solid var(--line);}
+  .preview-col{background:var(--paper-dim);}
+
+  .eyebrow{
+    font-size:11px;
+    letter-spacing:1.2px;
+    text-transform:uppercase;
+    color:var(--gold-deep);
+    font-weight:600;
+    margin:0 0 10px;
+  }
+  h2.section-title{
+    font-family:'Fraunces',serif;
+    font-size:18px;
+    font-weight:600;
+    margin:0 0 16px;
+    color:var(--ink);
+  }
+
+  /* ---------- Roster ---------- */
+  .roster-list{list-style:none;margin:0 0 16px;padding:0;}
+  .roster-item{
+    padding:10px 12px;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    background:var(--white);
+    margin-bottom:8px;
+    cursor:pointer;
+    transition:border-color .15s, background .15s;
+  }
+  .roster-item.item-inactive {
+    background: #ebe6dc;
+    color: var(--grey);
+    border-color: var(--line);
+  }
+  .roster-item:hover{border-color:var(--gold);}
+  .roster-item.active{
+    border-color:var(--gold-deep);
+    background:#fff8e8;
+  }
+  .roster-item .name{font-weight:600;font-size:13.5px;}
+  .roster-item .meta{font-size:11.5px;color:var(--grey);margin-top:2px;}
+
+  /* Dropdown integration styling */
+  .dropdown-group {
+    margin-bottom: 20px;
+    background: var(--white);
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+
+  button{
+    font-family:'Inter',sans-serif;
+    cursor:pointer;
+    border:none;
+    border-radius:var(--radius);
+  }
+  .btn-primary{
+    background:var(--ink);
+    color:var(--white);
+    padding:10px 16px;
+    font-size:13px;
+    font-weight:600;
+    letter-spacing:0.2px;
+  }
+  .btn-primary:hover{background:var(--ink-soft);}
+  .btn-gold{
+    background:var(--gold-deep);
+    color:var(--white);
+    padding:10px 16px;
+    font-size:13px;
+    font-weight:600;
+  }
+  .btn-gold:hover{background:#77590f;}
+  .btn-outline{
+    background:transparent;
+    border:1px solid var(--ink);
+    color:var(--ink);
+    padding:9px 15px;
+    font-size:13px;
+    font-weight:600;
+  }
+  .btn-outline:hover{background:var(--ink);color:var(--white);}
+  .btn-text{
+    background:none;
+    color:var(--grey);
+    font-size:12px;
+    padding:4px 6px;
+    text-decoration:underline;
+  }
+  .btn-block{width:100%;}
+  .btn-row{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;}
+
+  .field{margin-bottom:12px;}
+  .field label{
+    display:block;
+    font-size:11px;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.4px;
+    color:var(--grey);
+    margin-bottom:5px;
+  }
+  .field input, .field select{
+    width:100%;
+    padding:8px 10px;
+    font-size:13.5px;
+    font-family:'Inter',sans-serif;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    background:var(--white);
+    color:var(--ink);
+  }
+  .field input:focus, .field select:focus{
+    outline:2px solid var(--gold);
+    outline-offset:1px;
+    border-color:var(--gold);
+  }
+  .row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+
+  /* Inactive Profile Restriction Styles */
+  .profile-locked {
+    opacity: 0.45;
+    pointer-events: none !important;
+    position: relative;
+  }
+  .lock-overlay {
+    display: none;
+    background: #faebec;
+    border: 1px solid var(--red);
+    color: var(--red);
+    padding: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    border-radius: var(--radius);
+    text-align: center;
+    letter-spacing: 0.3px;
+  }
+
+  /* ---------- Photo ---------- */
+  .photo-row{display:flex;align-items:center;gap:12px;margin-top:4px;}
+  .photo-thumb{width:64px;height:64px;object-fit:cover;border:1px solid var(--line);border-radius:4px;background:var(--paper-dim);}
+  .photo-thumb.empty{display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--grey);text-align:center;padding:4px;}
+  .photo-controls input[type="file"]{font-size:11.5px;max-width:180px;}
+
+  /* ---------- Extra Earnings ---------- */
+  .extra-earning-row{display:grid;grid-template-columns:1fr 130px auto;gap:8px;margin-bottom:8px;align-items:center;}
+  .extra-earning-row input{width:100%;padding:8px 10px;font-size:13px;border:1px solid var(--line);border-radius:var(--radius);font-family:'Inter',sans-serif;}
+
+  /* ---------- History ---------- */
+  .history-item{
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    background:var(--white);
+    padding:12px 14px;
+    margin-bottom:10px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+  }
+  .history-item .h-main .h-name{font-weight:600;font-size:13.5px;}
+  .history-item .h-main .h-meta{font-size:11.5px;color:var(--grey);margin-top:2px;}
+  .history-item .h-net{
+    font-family:'IBM Plex Mono',monospace;
+    font-weight:600;
+    font-size:13.5px;
+    color:var(--gold-deep);
+    white-space:nowrap;
+  }
+  .empty-state{
+    font-size:12.5px;color:var(--grey);
+    border:1px dashed var(--line);
+    padding:22px;border-radius:var(--radius);
+    text-align:center;
+  }
+
+  /* ---------- Preview ---------- */
+  .preview-wrap{position:sticky;top:24px;}
+  .payslip{
+    background:var(--white);
+    border:1px solid var(--line);
+    box-shadow:0 6px 24px rgba(23,19,15,0.08);
+    position:relative;
+    overflow:hidden;
+  }
+  .ps-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:20px 22px 16px;
+    border-bottom:3px solid var(--gold-deep);
+    position:relative;
+  }
+  .ps-head-left{display:flex;align-items:center;gap:12px;}
+  .ps-head-left .co-name{font-family:'Fraunces',serif;font-weight:700;font-size:14.5px;line-height:1.25;}
+  .ps-head-left .co-sub{font-size:9.5px;color:var(--grey);letter-spacing:0.3px;}
+  #payslipPhoto{width:44px;height:44px;object-fit:cover;border-radius:3px;border:1px solid var(--line);display:none;}
+  .ps-head-right{
+    font-family:'Fraunces',serif;
+    font-weight:700;
+    font-size:20px;
+    color:var(--gold-deep);
+    letter-spacing:1px;
+  }
+  .ps-info{
+    padding:16px 22px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px 16px;
+    border-bottom:1px solid var(--line);
+    position:relative;
+  }
+  .ps-info .fi-label{font-size:9px;text-transform:uppercase;letter-spacing:0.5px;color:var(--grey);font-weight:600;}
+  .ps-info .fi-value{font-size:12.5px;font-weight:600;margin-top:1px;}
+  .ps-body{padding:16px 22px;position:relative;}
+  .ps-table{width:100%;border-collapse:collapse;margin-bottom:14px;}
+  .ps-table thead td{
+    background:var(--ink);
+    color:var(--white);
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:0.4px;
+    padding:7px 10px;
+    font-weight:700;
+  }
+  .ps-table.deductions thead td{background:var(--red);}
+  .ps-table td{
+    padding:6px 10px;
+    font-size:12px;
+    border-bottom:1px solid var(--paper-dim);
+  }
+  .ps-table td.amt{
+    text-align:right;
+    font-family:'IBM Plex Mono',monospace;
+    font-variant-numeric:tabular-nums;
+  }
+  .ps-table tr.total td{
+    font-weight:700;
+    background:var(--paper-dim);
+    border-top:1px solid var(--line);
+  }
+  .ps-table tr.total.earn td{color:var(--gold-deep);}
+  .ps-table tr.total.ded td{color:var(--red);}
+  .ps-net{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:var(--ink);
+    color:var(--white);
+    padding:14px 18px;
+    margin:4px 0 6px;
+  }
+  .ps-net .lbl{font-family:'Fraunces',serif;font-weight:600;font-size:14px;letter-spacing:0.5px;}
+  .ps-net .val{
+    font-family:'IBM Plex Mono',monospace;
+    font-weight:700;
+    font-size:17px;
+    color:var(--gold);
+  }
+  .ps-footnote{
+    font-size:9.5px;
+    color:var(--grey);
+    font-style:italic;
+    padding:0 22px 18px;
+  }
+  .ps-sign{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:24px;
+    padding:0 22px 20px;
+  }
+  .ps-sign .sig-line{border-top:1px solid var(--line);padding-top:6px;font-size:10px;color:var(--grey);}
+  .ps-stamp{
+    padding:14px 22px 20px;
+    border-top:1px dashed var(--line);
+    text-align:left;
+    font-size:9px;
+    color:var(--grey);
+    line-height:1.6;
+  }
+
+  .preview-actions{display:flex;gap:10px;margin-top:16px;}
+  .status-msg{
+    font-size:12px;
+    padding:8px 10px;
+    border-radius:var(--radius);
+    margin-bottom:12px;
+    display:none;
+  }
+  .status-msg.show{display:block;}
+  .status-msg.ok{background:#eaf4ea;color:#2c6b2f;border:1px solid #bfe0c0;}
+  .status-msg.err{background:#fbeaea;color:var(--red);border:1px solid #f0c6cb;}
+
+  @media (max-width:1100px){
+    .app{grid-template-columns:1fr;}
+    .roster,.workspace{border-right:none;border-bottom:1px solid var(--line);}
+    .preview-wrap{position:static;}
+  }
+
+  @media print{
+    .no-print{display:none !important;}
+    .topbar, .roster, .workspace{display:none !important;}
+    .app{display:block;}
+    .preview-col{background:#fff;padding:0;}
+    .preview-wrap{position:static;}
+    .payslip{box-shadow:none;border:none;}
+    body{background:#fff;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ---------- AUTH OVERLAY ---------- -->
+<div id="authOverlay" class="auth-overlay">
+  <div class="auth-card">
+    <div id="authMsg" class="auth-msg"></div>
+
+    <!-- First-run: create password (no demo credentials are baked in) -->
+    <div id="setupView" style="display:none;">
+      <h2>Set Up Admin Access</h2>
+      <p class="auth-sub">Username: <strong>x3madmin</strong></p>
+      <div class="field"><label>Create Password</label><input type="password" id="setupPwd1" placeholder="Minimum 6 characters"></div>
+      <div class="field"><label>Confirm Password</label><input type="password" id="setupPwd2" placeholder="Re-enter password"></div>
+      <button type="button" class="btn-primary btn-block" onclick="commitSetupPassword()">Create Password &amp; Continue</button>
+      <p class="auth-note">This is a basic browser-side access gate, not strong security. Your password is hashed and stored only in this browser — it is never sent anywhere. Anyone with access to this device, or to this file's source code, can potentially bypass it. Don't rely on it alone to protect the payroll data below.</p>
+    </div>
+
+    <!-- Login -->
+    <div id="loginView" style="display:none;">
+      <h2>X3M Payroll Access</h2>
+      <p class="auth-sub">Sign in to continue</p>
+      <div class="field"><label>Username</label><input type="text" id="loginUsername" placeholder="x3madmin"></div>
+      <div class="field"><label>Password</label><input type="password" id="loginPassword" placeholder="Password"></div>
+      <button type="button" class="btn-primary btn-block" onclick="attemptLogin()">Sign In</button>
+      <div class="auth-links"><a onclick="showAuthView('recover')">Forgot password?</a></div>
+      <p class="auth-note">This is a basic browser-side access gate, not strong security. Avoid using this on a shared or public device for sensitive payroll data.</p>
+    </div>
+
+    <!-- Recovery: verify username -->
+    <div id="recoverView" style="display:none;">
+      <h2>Recover Access</h2>
+      <p class="auth-sub">Enter the admin username to reset the password.</p>
+      <div class="field"><label>Username</label><input type="text" id="recoverUsername" placeholder="Username"></div>
+      <button type="button" class="btn-primary btn-block" onclick="verifyRecoveryUsername()">Continue</button>
+      <div class="auth-links"><a onclick="showAuthView('login')">Back to sign in</a></div>
+    </div>
+
+    <!-- Reset: set new password -->
+    <div id="resetView" style="display:none;">
+      <h2>Set New Password</h2>
+      <div class="field"><label>New Password</label><input type="password" id="resetPwd1" placeholder="Minimum 6 characters"></div>
+      <div class="field"><label>Confirm New Password</label><input type="password" id="resetPwd2" placeholder="Re-enter password"></div>
+      <button type="button" class="btn-primary btn-block" onclick="commitResetPassword()">Save New Password</button>
+      <div class="auth-links"><a onclick="showAuthView('login')">Back to sign in</a></div>
+    </div>
+  </div>
+</div>
+
+<div class="topbar no-print">
+  <div class="brand">
+    <div class="brand-text">
+      <h1>X3M Financial Consultancy Services Payslip</h1>
+    </div>
+  </div>
+  <div class="topbar-note">
+    Payroll System 2026
+    <div style="margin-top:6px;"><a onclick="logoutUser()">Log Out</a></div>
+  </div>
+</div>
+
+<div class="app app-hidden" id="mainApp">
+  <!-- ---------- ROSTER PANEL ---------- -->
+  <div class="panel roster no-print">
+    <div class="dropdown-group">
+      <div class="field" style="margin-bottom:0;">
+        <label for="sheetDropdown">Select From Registry</label>
+        <select id="sheetDropdown" onchange="handleSelectFromDropdown(this.value)">
+          <option value="">-- Choose Employee --</option>
+        </select>
+      </div>
+    </div>
+
+    <p class="eyebrow">Quick Selection</p>
+    <div id="rosterContainer"></div>
+  </div>
+
+  <!-- ---------- WORKSPACE PANEL ---------- -->
+  <div class="panel workspace no-print">
+    <div id="lockBadge" class="lock-overlay">🔒 PROFILE INACTIVE — MANAGEMENT ACCESS RESTRICTED</div>
+
+    <div id="statusMessage" class="status-msg"></div>
+
+    <div id="formContainer">
+      <p class="eyebrow">Profile Setup</p>
+      <h2 class="section-title">Employee Structural Data</h2>
+
+      <div class="row-2">
+        <div class="field">
+          <label>Employee ID</label>
+          <input type="text" id="empId" placeholder="e.g. X3M-2026-01" oninput="checkExistingEmployee()">
+        </div>
+        <div class="field">
+          <label>Status</label>
+          <select id="empStatus" onchange="handleStatusChange(this.value)">
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Full Name</label>
+        <input type="text" id="empFullName" placeholder="Last Name, First Name, M.I.">
+      </div>
+
+      <div class="row-2">
+        <div class="field">
+          <label>Designation</label>
+          <input type="text" id="empDesignation" placeholder="Position Profile">
+        </div>
+        <div class="field">
+          <label>Department</label>
+          <input type="text" id="empDepartment" placeholder="Operating Unit">
+        </div>
+      </div>
+
+      <div class="row-3">
+        <div class="field">
+          <label>Bank Account No.</label>
+          <input type="text" id="empBankNo" placeholder="Disbursement Ref">
+        </div>
+        <div class="field">
+          <label>TIN</label>
+          <input type="text" id="empTin" placeholder="000-000-000-000">
+        </div>
+        <div class="field">
+          <label>Date Started</label>
+          <input type="date" id="empDateStarted">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Employee Photo</label>
+        <div class="photo-row">
+          <img id="photoThumb" class="photo-thumb" src="" alt="" style="display:none;">
+          <div id="photoThumbEmpty" class="photo-thumb empty">No Photo</div>
+          <div class="photo-controls">
+            <input type="file" id="empPhotoInput" accept="image/*" onchange="handlePhotoUpload(event)">
+            <div><button type="button" class="btn-text" onclick="clearPhoto()">Remove Photo</button></div>
+          </div>
+        </div>
+      </div>
+
+      <p class="eyebrow" style="margin-top:20px;">Compensation & Ledger Structure</p>
+      <div class="row-3">
+        <div class="field">
+          <label>Basic Pay (Semi-Monthly)</label>
+          <input type="number" id="empBasicPay" value="0" step="0.01" oninput="liveRecalculate()">
+        </div>
+        <div class="field">
+          <label>Transportation Allowance</label>
+          <input type="number" id="empTransAllowance" value="0" step="0.01" oninput="liveRecalculate()">
+        </div>
+        <div class="field">
+          <label>Default Allowance</label>
+          <input type="number" id="empDefaultAllowance" value="0" step="0.01" oninput="liveRecalculate()">
+        </div>
+      </div>
+
+      <div style="margin-top:14px;">
+        <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.4px;color:var(--grey);margin-bottom:8px;">Additional Earnings (Optional)</label>
+        <div id="extraEarningsContainer"></div>
+        <div class="btn-row" style="margin-top:0;">
+          <button type="button" class="btn-text" onclick="addExtraEarningRow('13th Month Pay', 0)">+ 13th Month Pay</button>
+          <button type="button" class="btn-text" onclick="addExtraEarningRow('Bonus', 0)">+ Bonus</button>
+          <button type="button" class="btn-text" onclick="addExtraEarningRow('', 0)">+ Custom Earning</button>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button type="button" class="btn-primary" id="btnSaveEmployee" onclick="saveEmployeeData()">Save Employee Data</button>
+        <button type="button" class="btn-outline" onclick="resetForm()">Clear Master Fields</button>
+      </div>
+    </div>
+
+    <div style="margin-top:32px;">
+      <p class="eyebrow">Historical Manifest</p>
+      <h2 class="section-title">Archived Calculations (Google Sheet File)</h2>
+      <div id="historyContainer"></div>
+    </div>
+  </div>
+
+  <!-- ---------- PREVIEW COLUMN ---------- -->
+  <div class="panel preview-col">
+    <div class="preview-wrap">
+      <p class="eyebrow no-print">Document Rendering</p>
+      <h2 class="section-title no-print">Payslip Preview</h2>
+
+      <div class="payslip" id="payslipPrintArea">
+        <div class="ps-head">
+          <div class="ps-head-left">
+            <img id="payslipPhoto" src="" alt="">
+            <div>
+              <div class="co-name">X3M FINANCIAL CONSULTANCY SERVICES</div>
+              <div class="co-sub">Republic of the Philippines • Statutory Compliance Copy</div>
+            </div>
+          </div>
+          <div class="ps-head-right">PAYSLIP</div>
+        </div>
+
+        <div class="ps-info">
+          <div>
+            <div class="fi-label">Employee ID</div>
+            <div class="fi-value" id="viewId">—</div>
+          </div>
+          <div>
+            <div class="fi-label">Status</div>
+            <div class="fi-value" id="viewStatus">—</div>
+          </div>
+          <div style="grid-column: span 2;">
+            <div class="fi-label">Full Name</div>
+            <div class="fi-value" id="viewName">—</div>
+          </div>
+          <div>
+            <div class="fi-label">Designation</div>
+            <div class="fi-value" id="viewDesignation">—</div>
+          </div>
+          <div>
+            <div class="fi-label">Department</div>
+            <div class="fi-value" id="viewDepartment">—</div>
+          </div>
+          <div>
+            <div class="fi-label">Bank Account No.</div>
+            <div class="fi-value" id="viewBank">—</div>
+          </div>
+          <div>
+            <div class="fi-label">TIN</div>
+            <div class="fi-value" id="viewTin">—</div>
+          </div>
+          <div>
+            <div class="fi-label">Date Started</div>
+            <div class="fi-value" id="viewDateStarted">—</div>
+          </div>
+          <div>
+            <div class="fi-label">Pay Cycle</div>
+            <div class="fi-value">Semi-Monthly Ledger</div>
+          </div>
+        </div>
+
+        <div class="ps-body">
+          <table class="ps-table earnings">
+            <thead>
+              <tr>
+                <td>Earnings Manifest</td>
+                <td class="amt">Amount (PHP)</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Basic Salary (Semi-Monthly Allocation)</td>
+                <td class="amt" id="valBasic">0.00</td>
+              </tr>
+              <tr>
+                <td>Transportation Allowance</td>
+                <td class="amt" id="valTrans">0.00</td>
+              </tr>
+              <tr>
+                <td>Standard Operational Allowance</td>
+                <td class="amt" id="valAllow">0.00</td>
+              </tr>
+            </tbody>
+            <tbody id="extraEarningsPreviewRows"></tbody>
+            <tbody>
+              <tr class="total earn">
+                <td>Gross Semi-Monthly Earnings</td>
+                <td class="amt" id="valGross">0.00</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table class="ps-table deductions">
+            <thead>
+              <tr>
+                <td>Deductions</td>
+                <td class="amt">Amount (PHP)</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>SSS Premium Share (Semi-Monthly Apportioned)</td>
+                <td class="amt" id="valSss">0.00</td>
+              </tr>
+              <tr>
+                <td>PhilHealth Contribution Share</td>
+                <td class="amt" id="valPh">0.00</td>
+              </tr>
+              <tr>
+                <td>Pag-IBIG Fund Premium Contribution</td>
+                <td class="amt" id="valPibig">0.00</td>
+              </tr>
+              <tr>
+                <td>Withholding Tax (TRAIN Law Brackets)</td>
+                <td class="amt" id="valTax">0.00</td>
+              </tr>
+              <tr class="total ded">
+                <td>Total Statutory & Tax Reductions</td>
+                <td class="amt" id="valDeductions">0.00</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="ps-net">
+            <span class="lbl">NET PAY</span>
+            <span class="val" id="valNet">PHP 0.00</span>
+          </div>
+        </div>
+
+        <div class="ps-footnote">
+          Notice: Contributions evaluated from prevailing monthly basis bands allocated to individual payroll periods. Balance configuration checked.
+        </div>
+
+        <div class="ps-sign">
+          <div class="sig-line">Employer Authorized Signatory</div>
+          <div class="sig-line">Employee Acknowledgment Signature</div>
+        </div>
+
+        <div class="ps-stamp">
+          <strong>Disclaimer:</strong> This payslip is issued solely for the personal record of the named employee. X3M Financial Consultancy Services assumes no liability for any use, alteration, disclosure, or distribution of this document by the employee or any third party after it has been received. For the account holder's security, the bank account number is partially masked on printed and PDF copies of this document.
+        </div>
+      </div>
+
+      <div class="preview-actions no-print">
+        <button type="button" class="btn-gold btn-block" id="btnPrintAction" onclick="window.print()">Print Compliant Payslip Document</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  /**
+   * GOOGLE SHEETS DEPLOYMENT INTEGRATION
+   * To bridge this application directly to a real Google Sheet:
+   * 1. Open Google Sheets -> Extensions -> Apps Script.
+   * 2. Use the standard deployment format tracking the structural schema matching the headers exactly.
+   * 3. Deploy code as a Web App, select "Anyone" under access privileges, and insert the URL below.
+   *
+   * Fields now sent per record: id, fullName, designation, department, bankNo, tin,
+   * basicPay, transAllowance, defaultAllowance, extraEarnings (array of {name, amount}),
+   * photo (base64 JPEG data URL, resized client-side), dateStarted, status, history.
+   *
+   * IMPORTANT — to keep exactly one row per employee (no duplicates), the Apps Script
+   * "write"/"update" handler should UPSERT by `id`: search the ID column for a match;
+   * if found, overwrite that row in place; only append a new row when no match exists.
+   * This app tells the script which case it is via the "action" field ("write" for a
+   * brand-new employee, "update" for an existing one), but the script should still
+   * search-and-overwrite by id as the source of truth.
+   */
+  const GOOGLE_SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzkh2scyDOibLSGMgECpAtTKI23AvJtLDO9QbYe2RLjTNQ5VspA5fU4-BBwohoi1-JM/exec";
+  const SHEET_URL_PLACEHOLDER = "YOUR_APPS_SCRIPT_WEBAPP_URL_HERE";
+  const AUTH_USERNAME = "x3madmin";
+
+  // System State Repositories
+  let employeesDb = [];
+  let selectedEmployeeId = null;
+  let currentPhotoBase64 = "";
+  let extraEarnings = [];
+
+  // Initialize
+  window.addEventListener("DOMContentLoaded", () => {
+    initAuth();
+    bootstrapSystemDatabase();
+  });
+
+  /* =====================================================
+     AUTH: login / first-time setup / recovery / reset
+     ===================================================== */
+  async function sha256Hex(str) {
+    try {
+      const enc = new TextEncoder().encode(str);
+      const buf = await crypto.subtle.digest("SHA-256", enc);
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
+    } catch (e) {
+      // Fallback only if Web Crypto isn't available in this context
+      return "plain:" + str;
+    }
+  }
+
+  function showAuthMsg(msg, type) {
+    const box = document.getElementById("authMsg");
+    box.textContent = msg;
+    box.className = `auth-msg show ${type}`;
+  }
+  function clearAuthMsg() {
+    document.getElementById("authMsg").className = "auth-msg";
+  }
+
+  function showAuthView(view) {
+    ["setup", "login", "recover", "reset"].forEach(v => {
+      document.getElementById(v + "View").style.display = (v === view) ? "block" : "none";
+    });
+    clearAuthMsg();
+  }
+
+  function initAuth() {
+    const storedHash = localStorage.getItem("x3m_pwd_hash");
+    if (sessionStorage.getItem("x3m_authed") === "true" && storedHash) {
+      unlockApp();
+      return;
+    }
+    showAuthView(storedHash ? "login" : "setup");
+  }
+
+  function unlockApp() {
+    document.getElementById("authOverlay").style.display = "none";
+    document.getElementById("mainApp").classList.remove("app-hidden");
+  }
+
+  async function commitSetupPassword() {
+    const p1 = document.getElementById("setupPwd1").value;
+    const p2 = document.getElementById("setupPwd2").value;
+    if (p1.length < 6) { showAuthMsg("Password must be at least 6 characters.", "err"); return; }
+    if (p1 !== p2) { showAuthMsg("Passwords do not match.", "err"); return; }
+    localStorage.setItem("x3m_pwd_hash", await sha256Hex(p1));
+    sessionStorage.setItem("x3m_authed", "true");
+    unlockApp();
+  }
+
+  async function attemptLogin() {
+    const u = document.getElementById("loginUsername").value.trim();
+    const p = document.getElementById("loginPassword").value;
+    if (u.toLowerCase() !== AUTH_USERNAME) { showAuthMsg("Invalid username or password.", "err"); return; }
+    const storedHash = localStorage.getItem("x3m_pwd_hash");
+    const hash = await sha256Hex(p);
+    if (!storedHash || hash !== storedHash) { showAuthMsg("Invalid username or password.", "err"); return; }
+    sessionStorage.setItem("x3m_authed", "true");
+    unlockApp();
+  }
+
+  function verifyRecoveryUsername() {
+    const u = document.getElementById("recoverUsername").value.trim();
+    if (u.toLowerCase() !== AUTH_USERNAME) { showAuthMsg("Username not recognized.", "err"); return; }
+    showAuthView("reset");
+  }
+
+  async function commitResetPassword() {
+    const p1 = document.getElementById("resetPwd1").value;
+    const p2 = document.getElementById("resetPwd2").value;
+    if (p1.length < 6) { showAuthMsg("Password must be at least 6 characters.", "err"); return; }
+    if (p1 !== p2) { showAuthMsg("Passwords do not match.", "err"); return; }
+    localStorage.setItem("x3m_pwd_hash", await sha256Hex(p1));
+    showAuthView("login");
+    showAuthMsg("Password updated. Please sign in.", "ok");
+  }
+
+  function logoutUser() {
+    sessionStorage.removeItem("x3m_authed");
+    document.getElementById("mainApp").classList.add("app-hidden");
+    document.getElementById("authOverlay").style.display = "flex";
+    document.getElementById("loginPassword").value = "";
+    showAuthView("login");
+  }
+
+  /* =====================================================
+     DATA BOOTSTRAP
+     ===================================================== */
+  function bootstrapSystemDatabase() {
+    if (GOOGLE_SHEET_WEBAPP_URL && !GOOGLE_SHEET_WEBAPP_URL.includes(SHEET_URL_PLACEHOLDER)) {
+      fetch(GOOGLE_SHEET_WEBAPP_URL + "?action=read")
+        .then(res => res.json())
+        .then(data => {
+          employeesDb = data;
+          renderSystemViews();
+        })
+        .catch(err => {
+          showNotification("Remote Syncing Offline. Activating Local Cache Mock Engine.", "err");
+          loadFallbackData();
+        });
+    } else {
+      loadFallbackData();
+    }
+  }
+
+  function loadFallbackData() {
+    const cached = localStorage.getItem("x3m_employees_db");
+    if (cached) {
+      employeesDb = JSON.parse(cached);
+    } else {
+      // Seed Data matching tracking parameters exactly
+      employeesDb = [
+        {
+          id: "X3M-1092",
+          fullName: "Dela Cruz, Juan Mercado",
+          designation: "Senior Operations Specialist",
+          department: "Logistics Infrastructure",
+          bankNo: "1290481239",
+          tin: "402-119-228-000",
+          basicPay: 24500.00,
+          transAllowance: 2500.00,
+          defaultAllowance: 3000.00,
+          extraEarnings: [],
+          photo: "",
+          dateStarted: "2021-03-15",
+          status: "Active",
+          history: [
+            { date: "2026-06-15", gross: 30000.00, deductions: 3254.12, net: 26745.88 },
+            { date: "2026-06-30", gross: 30000.00, deductions: 3254.12, net: 26745.88 }
+          ]
+        },
+        {
+          id: "X3M-2011",
+          fullName: "Santos, Maria Clara",
+          designation: "Data Management Executive",
+          department: "Systems Control",
+          bankNo: "9834710293",
+          tin: "109-883-472-000",
+          basicPay: 14000.00,
+          transAllowance: 1500.00,
+          defaultAllowance: 1200.00,
+          extraEarnings: [],
+          photo: "",
+          dateStarted: "2024-08-01",
+          status: "Inactive",
+          history: [
+            { date: "2026-01-15", gross: 16700.00, deductions: 1102.40, net: 15597.60 }
+          ]
+        }
+      ];
+      persistState();
+    }
+    renderSystemViews();
+  }
+
+  function persistState() {
+    localStorage.setItem("x3m_employees_db", JSON.stringify(employeesDb));
+  }
+
+  function renderSystemViews() {
+    const dropdown = document.getElementById("sheetDropdown");
+    const roster = document.getElementById("rosterContainer");
+
+    dropdown.innerHTML = '<option value="">-- Choose Employee --</option>';
+    roster.innerHTML = '';
+
+    if (employeesDb.length === 0) {
+      roster.innerHTML = '<div class="empty-state">No listings synced from system registry file.</div>';
+      return;
+    }
+
+    employeesDb.forEach(emp => {
+      const opt = document.createElement("option");
+      opt.value = emp.id;
+      opt.textContent = `${emp.fullName} (${emp.id}) - ${emp.status}`;
+      dropdown.appendChild(opt);
+
+      const div = document.createElement("div");
+      div.className = `roster-item ${emp.id === selectedEmployeeId ? 'active' : ''} ${emp.status === 'Inactive' ? 'item-inactive' : ''}`;
+      div.onclick = () => handleSelectFromDropdown(emp.id);
+
+      div.innerHTML = `
+        <div class="name">${emp.fullName}</div>
+        <div class="meta">${emp.id} • ${emp.designation}</div>
+        <div class="meta" style="font-weight:600; color:${emp.status === 'Active' ? 'var(--gold-deep)' : 'var(--red)'};">Status: ${emp.status}</div>
+      `;
+      roster.appendChild(div);
+    });
+  }
+
+  function handleSelectFromDropdown(id) {
+    if (!id) { resetForm(); return; }
+
+    selectedEmployeeId = id;
+    document.getElementById("sheetDropdown").value = id;
+
+    const emp = employeesDb.find(e => e.id === id);
+    if (!emp) return;
+
+    document.getElementById("empId").value = emp.id;
+    document.getElementById("empFullName").value = emp.fullName;
+    document.getElementById("empDesignation").value = emp.designation;
+    document.getElementById("empDepartment").value = emp.department;
+    document.getElementById("empBankNo").value = emp.bankNo;
+    document.getElementById("empTin").value = emp.tin;
+    document.getElementById("empBasicPay").value = emp.basicPay;
+    document.getElementById("empTransAllowance").value = emp.transAllowance;
+    document.getElementById("empDefaultAllowance").value = emp.defaultAllowance;
+    document.getElementById("empDateStarted").value = emp.dateStarted;
+    document.getElementById("empStatus").value = emp.status;
+
+    extraEarnings = (emp.extraEarnings || []).map((e, i) => ({ id: 'ex_load_' + i + '_' + Date.now(), name: e.name, amount: e.amount }));
+    renderExtraEarnings();
+
+    currentPhotoBase64 = emp.photo || "";
+    setPhotoPreview(currentPhotoBase64);
+
+    evaluateProfileAccessControl(emp.status);
+    checkExistingEmployee();
+    executeLedgerCalculations(emp);
+    renderHistoryTrack(emp.history);
+    renderSystemViews();
+  }
+
+  function handleStatusChange(status) {
+    evaluateProfileAccessControl(status);
+    liveRecalculate();
+  }
+
+  function evaluateProfileAccessControl(status) {
+    const container = document.getElementById("formContainer");
+    const badge = document.getElementById("lockBadge");
+    const printBtn = document.getElementById("btnPrintAction");
+
+    if (status === "Inactive") {
+      container.classList.add("profile-locked");
+      badge.style.display = "block";
+      if (printBtn) { printBtn.disabled = true; printBtn.classList.add("profile-locked"); }
+    } else {
+      container.classList.remove("profile-locked");
+      badge.style.display = "none";
+      if (printBtn) { printBtn.disabled = false; printBtn.classList.remove("profile-locked"); }
+    }
+  }
+
+  /* =====================================================
+     EXTRA EARNINGS (13th Month Pay, Bonus, Custom)
+     ===================================================== */
+  function addExtraEarningRow(name = "", amount = 0) {
+    const rowId = 'ex_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+    extraEarnings.push({ id: rowId, name: name, amount: amount });
+    renderExtraEarnings();
+    liveRecalculate();
+  }
+
+  function removeExtraEarningRow(rowId) {
+    extraEarnings = extraEarnings.filter(e => e.id !== rowId);
+    renderExtraEarnings();
+    liveRecalculate();
+  }
+
+  function updateExtraEarningField(rowId, field, value) {
+    const item = extraEarnings.find(e => e.id === rowId);
+    if (!item) return;
+    item[field] = field === 'amount' ? (parseFloat(value) || 0) : value;
+    liveRecalculate();
+  }
+
+  function renderExtraEarnings() {
+    const wrap = document.getElementById("extraEarningsContainer");
+    wrap.innerHTML = '';
+    extraEarnings.forEach(e => {
+      const row = document.createElement('div');
+      row.className = 'extra-earning-row';
+      row.innerHTML = `
+        <input type="text" placeholder="Earning label (e.g. 13th Month Pay)" value="${escapeAttr(e.name)}" oninput="updateExtraEarningField('${e.id}','name',this.value)">
+        <input type="number" step="0.01" placeholder="Amount" value="${e.amount}" oninput="updateExtraEarningField('${e.id}','amount',this.value)">
+        <button type="button" class="btn-text" onclick="removeExtraEarningRow('${e.id}')">Remove</button>
+      `;
+      wrap.appendChild(row);
+    });
+  }
+
+  function computeExtraEarningsTotal() {
+    return extraEarnings.reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0);
+  }
+
+  function renderExtraEarningsPreview() {
+    const tbody = document.getElementById("extraEarningsPreviewRows");
+    tbody.innerHTML = '';
+    extraEarnings.forEach(e => {
+      if (!e.name && !e.amount) return;
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${escapeAttr(e.name || "Additional Earning")}</td><td class="amt">${formatCurrency(e.amount || 0)}</td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function escapeAttr(s) {
+    return String(s || "").replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  /* =====================================================
+     PHOTO UPLOAD (resized/compressed client-side to fit
+     comfortably under Google Sheets' 50,000-char cell limit)
+     ===================================================== */
+  function handlePhotoUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const img = new Image();
+      img.onload = function () {
+        const canvas = document.createElement("canvas");
+        const maxDim = 160;
+        let w = img.width, h = img.height;
+        if (w > h) { if (w > maxDim) { h = Math.round(h * (maxDim / w)); w = maxDim; } }
+        else { if (h > maxDim) { w = Math.round(w * (maxDim / h)); h = maxDim; } }
+        canvas.width = w; canvas.height = h;
+        canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+        currentPhotoBase64 = canvas.toDataURL("image/jpeg", 0.7);
+        setPhotoPreview(currentPhotoBase64);
+        if (currentPhotoBase64.length > 45000) {
+          showNotification("Photo saved, but it's large for Google Sheets' 50,000-character cell limit. Consider a simpler image.", "err");
+        }
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function clearPhoto() {
+    currentPhotoBase64 = "";
+    document.getElementById("empPhotoInput").value = "";
+    setPhotoPreview("");
+  }
+
+  function setPhotoPreview(src) {
+    const thumb = document.getElementById("photoThumb");
+    const empty = document.getElementById("photoThumbEmpty");
+    const psPhoto = document.getElementById("payslipPhoto");
+    if (src) {
+      thumb.src = src; thumb.style.display = "block"; empty.style.display = "none";
+      psPhoto.src = src; psPhoto.style.display = "block";
+    } else {
+      thumb.style.display = "none"; empty.style.display = "flex";
+      psPhoto.style.display = "none"; psPhoto.src = "";
+    }
+  }
+
+  /* =====================================================
+     DUPLICATE / UPDATE DETECTION
+     ===================================================== */
+  function checkExistingEmployee() {
+    const id = document.getElementById("empId").value.trim();
+    const btn = document.getElementById("btnSaveEmployee");
+    const matched = id && employeesDb.some(e => e.id.toLowerCase() === id.toLowerCase());
+    btn.textContent = matched ? "Update Employee Record" : "Save Employee Data";
+    btn.dataset.mode = matched ? "update" : "new";
+  }
+
+  function liveRecalculate() {
+    const currentMockProfile = {
+      id: document.getElementById("empId").value || "—",
+      fullName: document.getElementById("empFullName").value || "—",
+      designation: document.getElementById("empDesignation").value || "—",
+      department: document.getElementById("empDepartment").value || "—",
+      bankNo: document.getElementById("empBankNo").value || "—",
+      tin: document.getElementById("empTin").value || "—",
+      basicPay: parseFloat(document.getElementById("empBasicPay").value) || 0,
+      transAllowance: parseFloat(document.getElementById("empTransAllowance").value) || 0,
+      defaultAllowance: parseFloat(document.getElementById("empDefaultAllowance").value) || 0,
+      dateStarted: document.getElementById("empDateStarted").value || "—",
+      status: document.getElementById("empStatus").value
+    };
+    executeLedgerCalculations(currentMockProfile);
+  }
+
+  /**
+   * PHILIPPINE LABOR CODE COMPLIANT CALCULATIONS MATRIX
+   * Evaluated on standard Semi-Monthly Deductions frameworks (TRAIN Law & Contribution Schedules).
+   * Note: Additional earnings (e.g. 13th month pay, bonus) are added to gross and, for
+   * simplicity, taxed the same way as regular pay here. Philippine tax rules actually
+   * exempt 13th month pay and certain bonuses up to a combined ₱90,000 threshold — this
+   * simplified matrix does not model that exemption, so treat the tax figure as an estimate
+   * and confirm exact statutory treatment with your accountant or BIR guidance.
+   */
+  function executeLedgerCalculations(emp) {
+    const basic = parseFloat(emp.basicPay) || 0;
+    const trans = parseFloat(emp.transAllowance) || 0;
+    const allow = parseFloat(emp.defaultAllowance) || 0;
+    const extraTotal = computeExtraEarningsTotal();
+
+    renderExtraEarningsPreview();
+
+    const gross = basic + trans + allow + extraTotal;
+
+    const projectedMonthlyBasic = basic * 2;
+
+    let sssMonthlyCredit = Math.min(Math.max(projectedMonthlyBasic, 4250), 30000);
+    let sssDeduction = (sssMonthlyCredit * 0.045) / 2;
+
+    let phMonthlyBase = Math.min(Math.max(projectedMonthlyBasic, 10000), 100000);
+    let philhealthDeduction = (phMonthlyBase * 0.025) / 2;
+
+    let hdmfMonthlyBase = Math.min(projectedMonthlyBasic, 10000);
+    let pagibigDeduction = (hdmfMonthlyBase * 0.02) / 2;
+
+    const totalStatutory = sssDeduction + philhealthDeduction + pagibigDeduction;
+
+    const taxableIncome = Math.max(0, basic + extraTotal - totalStatutory);
+
+    let withholdingTax = 0;
+    if (taxableIncome <= 10417) {
+      withholdingTax = 0;
+    } else if (taxableIncome <= 16667) {
+      withholdingTax = (taxableIncome - 10417) * 0.15;
+    } else if (taxableIncome <= 33333) {
+      withholdingTax = 937.50 + (taxableIncome - 16667) * 0.20;
+    } else if (taxableIncome <= 83333) {
+      withholdingTax = 4270.83 + (taxableIncome - 33333) * 0.25;
+    } else if (taxableIncome <= 333333) {
+      withholdingTax = 16770.83 + (taxableIncome - 83333) * 0.30;
+    } else {
+      withholdingTax = 91770.83 + (taxableIncome - 333333) * 0.35;
+    }
+
+    const totalDeductions = totalStatutory + withholdingTax;
+    const netPay = gross - totalDeductions;
+
+    document.getElementById("viewId").textContent = emp.id;
+    document.getElementById("viewStatus").textContent = emp.status;
+    document.getElementById("viewStatus").style.color = emp.status === "Active" ? "var(--gold-deep)" : "var(--red)";
+    document.getElementById("viewName").textContent = emp.fullName;
+    document.getElementById("viewDesignation").textContent = emp.designation;
+    document.getElementById("viewDepartment").textContent = emp.department;
+    document.getElementById("viewBank").textContent = emp.bankNo;
+    document.getElementById("viewTin").textContent = emp.tin;
+    document.getElementById("viewDateStarted").textContent = emp.dateStarted || "—";
+
+    document.getElementById("valBasic").textContent = formatCurrency(basic);
+    document.getElementById("valTrans").textContent = formatCurrency(trans);
+    document.getElementById("valAllow").textContent = formatCurrency(allow);
+    document.getElementById("valGross").textContent = formatCurrency(gross);
+
+    document.getElementById("valSss").textContent = formatCurrency(sssDeduction);
+    document.getElementById("valPh").textContent = formatCurrency(philhealthDeduction);
+    document.getElementById("valPibig").textContent = formatCurrency(pagibigDeduction);
+    document.getElementById("valTax").textContent = formatCurrency(withholdingTax);
+    document.getElementById("valDeductions").textContent = formatCurrency(totalDeductions);
+
+    document.getElementById("valNet").textContent = `PHP ${formatCurrency(netPay)}`;
+  }
+
+  function renderHistoryTrack(historyArr) {
+    const container = document.getElementById("historyContainer");
+    container.innerHTML = '';
+
+    if (!historyArr || historyArr.length === 0) {
+      container.innerHTML = '<div class="empty-state">No past payslip generations archived in files.</div>';
+      return;
+    }
+
+    historyArr.slice().reverse().forEach(h => {
+      const div = document.createElement("div");
+      div.className = "history-item";
+      div.innerHTML = `
+        <div class="h-main">
+          <div class="h-name">Pay Cycle Run: ${h.date}</div>
+          <div class="h-meta">Gross: ₱${formatCurrency(h.gross)} • Reductions: ₱${formatCurrency(h.deductions)}</div>
+        </div>
+        <div class="h-net">₱${formatCurrency(h.net)} Net</div>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  /* =====================================================
+     SAVE / UPDATE (upsert by Employee ID — no duplicates)
+     ===================================================== */
+  function saveEmployeeData() {
+    const id = document.getElementById("empId").value.trim();
+    const fullName = document.getElementById("empFullName").value.trim();
+    const status = document.getElementById("empStatus").value;
+
+    if (!id || !fullName) {
+      showNotification("Employee ID and Full Name validation criteria failed.", "err");
+      return;
+    }
+
+    const basic = parseFloat(document.getElementById("empBasicPay").value) || 0;
+    const trans = parseFloat(document.getElementById("empTransAllowance").value) || 0;
+    const allow = parseFloat(document.getElementById("empDefaultAllowance").value) || 0;
+    const extraTotal = computeExtraEarningsTotal();
+
+    const projectedMonthlyBasic = basic * 2;
+    let sss = (Math.min(Math.max(projectedMonthlyBasic, 4250), 30000) * 0.045) / 2;
+    let ph = (Math.min(Math.max(projectedMonthlyBasic, 10000), 100000) * 0.025) / 2;
+    let pibig = (Math.min(projectedMonthlyBasic, 10000) * 0.02) / 2;
+    let taxable = Math.max(0, basic + extraTotal - (sss + ph + pibig));
+    let tax = 0;
+    if (taxable > 10417 && taxable <= 16667) tax = (taxable - 10417) * 0.15;
+    else if (taxable > 16667 && taxable <= 33333) tax = 937.50 + (taxable - 16667) * 0.20;
+    else if (taxable > 33333 && taxable <= 83333) tax = 4270.83 + (taxable - 33333) * 0.25;
+    else if (taxable > 83333 && taxable <= 333333) tax = 16770.83 + (taxable - 83333) * 0.30;
+    else if (taxable > 333333) tax = 91770.83 + (taxable - 333333) * 0.35;
+
+    const totalDeds = sss + ph + pibig + tax;
+    const gross = basic + trans + allow + extraTotal;
+    const net = gross - totalDeds;
+
+    const currentRunHistory = {
+      date: new Date().toISOString().split('T')[0],
+      gross: gross,
+      deductions: totalDeds,
+      net: net
+    };
+
+    const matchedIndex = employeesDb.findIndex(e => e.id.toLowerCase() === id.toLowerCase());
+    const isUpdate = matchedIndex !== -1;
+
+    const nameClashIndex = employeesDb.findIndex(e =>
+      e.fullName.trim().toLowerCase() === fullName.toLowerCase() && e.id.toLowerCase() !== id.toLowerCase()
+    );
+
+    const payload = {
+      id: id,
+      fullName: fullName,
+      designation: document.getElementById("empDesignation").value.trim(),
+      department: document.getElementById("empDepartment").value.trim(),
+      bankNo: document.getElementById("empBankNo").value.trim(),
+      tin: document.getElementById("empTin").value.trim(),
+      basicPay: basic,
+      transAllowance: trans,
+      defaultAllowance: allow,
+      extraEarnings: extraEarnings.filter(e => e.name || e.amount).map(e => ({ name: e.name, amount: parseFloat(e.amount) || 0 })),
+      photo: currentPhotoBase64 || (isUpdate ? (employeesDb[matchedIndex].photo || "") : ""),
+      dateStarted: document.getElementById("empDateStarted").value,
+      status: status,
+      history: []
+    };
+
+    if (isUpdate) {
+      payload.history = [...employeesDb[matchedIndex].history, currentRunHistory];
+      employeesDb[matchedIndex] = payload;
+    } else {
+      payload.history.push(currentRunHistory);
+      employeesDb.push(payload);
+    }
+
+    selectedEmployeeId = id;
+
+    // Sync with Google Sheets. The Apps Script web app should upsert by `id` — see the
+    // integration comment block at the top of this script for the expected behavior.
+    if (GOOGLE_SHEET_WEBAPP_URL && !GOOGLE_SHEET_WEBAPP_URL.includes(SHEET_URL_PLACEHOLDER)) {
+      fetch(GOOGLE_SHEET_WEBAPP_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: isUpdate ? "update" : "write", data: payload })
+      }).then(() => {
+        showNotification(isUpdate ? "Existing record updated in Google Sheet." : "New record dispatched to Google Sheet.", "ok");
+      }).catch(() => {
+        showNotification("Sheet delivery connection error. Preserved locally.", "err");
+      });
+    }
+
+    persistState();
+    renderSystemViews();
+    handleSelectFromDropdown(id);
+
+    if (nameClashIndex !== -1) {
+      showNotification(`Saved. Note: "${fullName}" also exists under a different ID (${employeesDb[nameClashIndex].id}) — please verify this isn't an accidental duplicate.`, "err");
+    } else {
+      showNotification(isUpdate ? "Record updated safely in system directory schema." : "New record committed safely to system directory schema.", "ok");
+    }
+  }
+
+  function resetForm() {
+    selectedEmployeeId = null;
+    document.getElementById("sheetDropdown").value = "";
+
+    const fields = ["empId", "empFullName", "empDesignation", "empDepartment", "empBankNo", "empTin", "empDateStarted"];
+    fields.forEach(f => document.getElementById(f).value = "");
+
+    document.getElementById("empBasicPay").value = "0";
+    document.getElementById("empTransAllowance").value = "0";
+    document.getElementById("empDefaultAllowance").value = "0";
+    document.getElementById("empStatus").value = "Active";
+
+    extraEarnings = [];
+    renderExtraEarnings();
+    clearPhoto();
+
+    evaluateProfileAccessControl("Active");
+    checkExistingEmployee();
+    liveRecalculate();
+    renderHistoryTrack([]);
+    renderSystemViews();
+  }
+
+  function showNotification(msg, type) {
+    const box = document.getElementById("statusMessage");
+    box.className = `status-msg show ${type}`;
+    box.textContent = msg;
+    setTimeout(() => box.className = "status-msg", 5000);
+  }
+
+  function formatCurrency(num) {
+    return parseFloat(num).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+  }
+
+  /* =====================================================
+     PRINT-TIME BANK ACCOUNT MASKING
+     Full number stays visible on screen for admin editing;
+     only the last 4 digits show on printed/PDF copies.
+     ===================================================== */
+  function maskBankNumber(str) {
+    const digits = (str || "").replace(/\D/g, "");
+    if (digits.length <= 4) return str || "—";
+    const last4 = digits.slice(-4);
+    return "•".repeat(digits.length - 4) + last4;
+  }
+
+  window.addEventListener("beforeprint", () => {
+    const bankEl = document.getElementById("viewBank");
+    bankEl.dataset.fullValue = bankEl.textContent;
+    bankEl.textContent = maskBankNumber(bankEl.textContent);
+  });
+  window.addEventListener("afterprint", () => {
+    const bankEl = document.getElementById("viewBank");
+    if (bankEl.dataset.fullValue !== undefined) {
+      bankEl.textContent = bankEl.dataset.fullValue;
+    }
+  });
+</script>
+</body>
+</html>
