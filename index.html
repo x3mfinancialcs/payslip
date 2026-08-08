@@ -14,6 +14,7 @@
     --gold-deep:#8a6d1f;
     --gold-pale:#ecd9ad;
     --red:#ab1f34;
+    --green:#2c6b2f;
     --paper:#faf7f1;
     --paper-dim:#f1ece1;
     --line:#e2d9c6;
@@ -43,7 +44,6 @@
     border-bottom:3px solid var(--gold);
   }
   .brand{display:flex;align-items:center;gap:14px;}
-  .brand img{width:42px;height:42px;display:block;}
   .brand-text h1{
     font-family:'Fraunces',serif;
     font-weight:600;
@@ -51,13 +51,7 @@
     letter-spacing:0.3px;
     margin:0;
   }
-  .brand-text p{
-    margin:2px 0 0;
-    font-size:11.5px;
-    color:var(--gold-pale);
-    letter-spacing:0.5px;
-    text-transform:uppercase;
-  }
+  .topbar-right{display:flex;align-items:center;gap:16px;}
   .topbar-note{
     font-size:11.5px;
     color:#c9c2b5;
@@ -65,40 +59,47 @@
     max-width:260px;
     line-height:1.4;
   }
-  .topbar-note a{color:#c9c2b5;cursor:pointer;text-decoration:underline;font-size:11px;}
+  .btn-logout{
+    background:transparent;
+    border:1px solid #55503f;
+    color:#e7e2d4;
+    padding:7px 12px;
+    font-size:11.5px;
+    font-weight:600;
+    border-radius:var(--radius);
+  }
+  .btn-logout:hover{background:#2a251d;}
 
   /* ---------- Auth Overlay ---------- */
   .auth-overlay{
-    position:fixed;inset:0;
-    background:rgba(23,19,15,0.92);
-    display:flex;align-items:center;justify-content:center;
-    z-index:1000;padding:20px;
+    position:fixed; inset:0; background:var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    z-index:1000; padding:20px;
   }
   .auth-card{
-    background:var(--paper);color:var(--ink);
-    width:380px;max-width:100%;padding:32px;
-    border-radius:var(--radius);
-    box-shadow:0 10px 40px rgba(0,0,0,.5);
+    background:var(--paper); color:var(--ink);
+    width:380px; max-width:100%; padding:30px 28px;
+    border-radius:var(--radius); box-shadow:0 12px 44px rgba(0,0,0,.45);
+    border-top:3px solid var(--gold-deep);
   }
-  .auth-card h2{font-family:'Fraunces',serif;margin:0 0 6px;font-size:19px;}
-  .auth-sub{font-size:12px;color:var(--grey);margin:0 0 18px;}
-  .auth-note{font-size:11px;color:var(--grey);margin-top:16px;line-height:1.5;}
-  .auth-msg{display:none;padding:8px 10px;font-size:12.5px;border-radius:var(--radius);margin-bottom:14px;}
-  .auth-msg.show{display:block;}
-  .auth-msg.err{background:#fbeaea;color:var(--red);border:1px solid #f0c6cb;}
-  .auth-msg.ok{background:#eaf4ea;color:#2c6b2f;border:1px solid #bfe0c0;}
-  .auth-links{margin-top:12px;font-size:12px;text-align:center;}
+  .auth-card h2{font-family:'Fraunces',serif; margin:0 0 6px; font-size:20px;}
+  .auth-sub{font-size:12px;color:var(--grey);margin:0 0 18px;line-height:1.5;}
+  .auth-error{display:none;background:#fbeaea;color:var(--red);border:1px solid #f0c6cb;padding:9px 11px;font-size:12.5px;border-radius:var(--radius);margin-bottom:12px;}
+  .auth-error.show{display:block;}
+  .auth-error.ok-msg{background:#eaf4ea;color:var(--green);border-color:#bfe0c0;}
+  .auth-links{margin-top:14px;font-size:12px;text-align:center;}
   .auth-links a{color:var(--gold-deep);cursor:pointer;text-decoration:underline;}
-  .app-hidden{display:none !important;}
+  .auth-note{font-size:10.5px;color:var(--grey);margin-top:16px;line-height:1.5;border-top:1px solid var(--line);padding-top:12px;}
 
   /* ---------- Layout ---------- */
   .app{
     display:grid;
-    grid-template-columns:270px 1fr 400px;
+    grid-template-columns:270px 1fr 420px;
     gap:0;
     align-items:start;
     min-height:calc(100vh - 78px);
   }
+  .app-hidden{display:none;}
   .panel{padding:24px;}
   .roster{
     border-right:1px solid var(--line);
@@ -124,7 +125,6 @@
   }
 
   /* ---------- Roster ---------- */
-  .roster-list{list-style:none;margin:0 0 16px;padding:0;}
   .roster-item{
     padding:10px 12px;
     border:1px solid var(--line);
@@ -133,21 +133,16 @@
     margin-bottom:8px;
     cursor:pointer;
     transition:border-color .15s, background .15s;
+    display:flex; align-items:center; gap:10px;
   }
-  .roster-item.item-inactive {
-    background: #ebe6dc;
-    color: var(--grey);
-    border-color: var(--line);
-  }
+  .roster-item.item-inactive { background:#ebe6dc; color:var(--grey); border-color:var(--line); }
   .roster-item:hover{border-color:var(--gold);}
-  .roster-item.active{
-    border-color:var(--gold-deep);
-    background:#fff8e8;
-  }
+  .roster-item.active{border-color:var(--gold-deep);background:#fff8e8;}
+  .roster-thumb{width:32px;height:32px;border-radius:50%;object-fit:cover;border:1px solid var(--line);flex-shrink:0;background:var(--paper-dim);}
+  .roster-thumb-placeholder{width:32px;height:32px;border-radius:50%;background:var(--paper-dim);border:1px solid var(--line);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--grey);font-weight:700;}
   .roster-item .name{font-weight:600;font-size:13.5px;}
   .roster-item .meta{font-size:11.5px;color:var(--grey);margin-top:2px;}
 
-  /* Dropdown integration styling */
   .dropdown-group {
     margin-bottom: 20px;
     background: var(--white);
@@ -162,244 +157,115 @@
     border:none;
     border-radius:var(--radius);
   }
-  .btn-primary{
-    background:var(--ink);
-    color:var(--white);
-    padding:10px 16px;
-    font-size:13px;
-    font-weight:600;
-    letter-spacing:0.2px;
-  }
+  .btn-primary{background:var(--ink);color:var(--white);padding:10px 16px;font-size:13px;font-weight:600;letter-spacing:0.2px;}
   .btn-primary:hover{background:var(--ink-soft);}
-  .btn-gold{
-    background:var(--gold-deep);
-    color:var(--white);
-    padding:10px 16px;
-    font-size:13px;
-    font-weight:600;
-  }
+  .btn-gold{background:var(--gold-deep);color:var(--white);padding:10px 16px;font-size:13px;font-weight:600;}
   .btn-gold:hover{background:#77590f;}
-  .btn-outline{
-    background:transparent;
-    border:1px solid var(--ink);
-    color:var(--ink);
-    padding:9px 15px;
-    font-size:13px;
-    font-weight:600;
-  }
+  .btn-gold:disabled{background:#c9c2b5;cursor:not-allowed;}
+  .btn-outline{background:transparent;border:1px solid var(--ink);color:var(--ink);padding:9px 15px;font-size:13px;font-weight:600;}
   .btn-outline:hover{background:var(--ink);color:var(--white);}
-  .btn-text{
-    background:none;
-    color:var(--grey);
-    font-size:12px;
-    padding:4px 6px;
-    text-decoration:underline;
-  }
+  .btn-text{background:none;color:var(--grey);font-size:12px;padding:4px 6px;text-decoration:underline;}
   .btn-block{width:100%;}
   .btn-row{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;}
 
   .field{margin-bottom:12px;}
-  .field label{
-    display:block;
-    font-size:11px;
-    font-weight:600;
-    text-transform:uppercase;
-    letter-spacing:0.4px;
-    color:var(--grey);
-    margin-bottom:5px;
-  }
+  .field label{display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.4px;color:var(--grey);margin-bottom:5px;}
   .field input, .field select{
-    width:100%;
-    padding:8px 10px;
-    font-size:13.5px;
-    font-family:'Inter',sans-serif;
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    background:var(--white);
-    color:var(--ink);
+    width:100%;padding:8px 10px;font-size:13.5px;font-family:'Inter',sans-serif;
+    border:1px solid var(--line);border-radius:var(--radius);background:var(--white);color:var(--ink);
   }
-  .field input:focus, .field select:focus{
-    outline:2px solid var(--gold);
-    outline-offset:1px;
-    border-color:var(--gold);
-  }
+  .field input:focus, .field select:focus{outline:2px solid var(--gold);outline-offset:1px;border-color:var(--gold);}
+  .field input[readonly]{background:var(--paper-dim);color:var(--ink-soft);}
   .row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
   .row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  .hint{font-size:10.5px;color:var(--grey);margin-top:-8px;margin-bottom:12px;}
+
+  /* ---------- Photo upload ---------- */
+  .photo-upload-block{
+    display:flex; align-items:center; gap:14px;
+    background:var(--white); border:1px solid var(--line); border-radius:var(--radius);
+    padding:14px; margin-bottom:18px;
+  }
+  .photo-thumb-wrap{
+    width:64px;height:64px;border-radius:50%;overflow:hidden;
+    border:2px solid var(--gold-deep); background:var(--paper-dim);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .photo-thumb-wrap img{width:100%;height:100%;object-fit:cover;display:none;}
+  .photo-thumb-wrap .ph-empty{font-size:10px;color:var(--grey);text-align:center;}
+  .photo-actions{display:flex;flex-direction:column;gap:6px;}
+  .photo-actions input[type=file]{font-size:11.5px;}
 
   /* Inactive Profile Restriction Styles */
-  .profile-locked {
-    opacity: 0.45;
-    pointer-events: none !important;
-    position: relative;
-  }
-  .lock-overlay {
-    display: none;
-    background: #faebec;
-    border: 1px solid var(--red);
-    color: var(--red);
-    padding: 12px;
-    font-size: 13px;
-    font-weight: 600;
-    margin-bottom: 16px;
-    border-radius: var(--radius);
-    text-align: center;
-    letter-spacing: 0.3px;
+  .profile-locked { opacity:0.45; pointer-events:none !important; position:relative; }
+  .lock-overlay{
+    display:none;background:#faebec;border:1px solid var(--red);color:var(--red);
+    padding:12px;font-size:13px;font-weight:600;margin-bottom:16px;border-radius:var(--radius);
+    text-align:center;letter-spacing:0.3px;
   }
 
-  /* ---------- Photo ---------- */
-  .photo-row{display:flex;align-items:center;gap:12px;margin-top:4px;}
-  .photo-thumb{width:64px;height:64px;object-fit:cover;border:1px solid var(--line);border-radius:4px;background:var(--paper-dim);}
-  .photo-thumb.empty{display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--grey);text-align:center;padding:4px;}
-  .photo-controls input[type="file"]{font-size:11.5px;max-width:180px;}
-
-  /* ---------- Extra Earnings ---------- */
-  .extra-earning-row{display:grid;grid-template-columns:1fr 130px auto;gap:8px;margin-bottom:8px;align-items:center;}
-  .extra-earning-row input{width:100%;padding:8px 10px;font-size:13px;border:1px solid var(--line);border-radius:var(--radius);font-family:'Inter',sans-serif;}
+  /* ---------- Earnings rows ---------- */
+  .earning-row{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:center;margin-bottom:8px;}
+  .earning-row input{padding:7px 9px;font-size:13px;border:1px solid var(--line);border-radius:var(--radius);}
+  .earnings-empty{font-size:11.5px;color:var(--grey);font-style:italic;margin-bottom:8px;}
 
   /* ---------- History ---------- */
   .history-item{
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    background:var(--white);
-    padding:12px 14px;
-    margin-bottom:10px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
+    border:1px solid var(--line);border-radius:var(--radius);background:var(--white);
+    padding:12px 14px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;
   }
   .history-item .h-main .h-name{font-weight:600;font-size:13.5px;}
   .history-item .h-main .h-meta{font-size:11.5px;color:var(--grey);margin-top:2px;}
-  .history-item .h-net{
-    font-family:'IBM Plex Mono',monospace;
-    font-weight:600;
-    font-size:13.5px;
-    color:var(--gold-deep);
-    white-space:nowrap;
-  }
-  .empty-state{
-    font-size:12.5px;color:var(--grey);
-    border:1px dashed var(--line);
-    padding:22px;border-radius:var(--radius);
-    text-align:center;
-  }
+  .history-item .h-net{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13.5px;color:var(--gold-deep);white-space:nowrap;}
+  .empty-state{font-size:12.5px;color:var(--grey);border:1px dashed var(--line);padding:22px;border-radius:var(--radius);text-align:center;}
 
   /* ---------- Preview ---------- */
   .preview-wrap{position:sticky;top:24px;}
-  .payslip{
-    background:var(--white);
-    border:1px solid var(--line);
-    box-shadow:0 6px 24px rgba(23,19,15,0.08);
-    position:relative;
-    overflow:hidden;
-  }
-  .ps-head{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:20px 22px 16px;
-    border-bottom:3px solid var(--gold-deep);
-    position:relative;
-  }
+  .payslip{background:var(--white);border:1px solid var(--line);box-shadow:0 6px 24px rgba(23,19,15,0.08);position:relative;overflow:hidden;}
+  .ps-head{display:flex;align-items:center;justify-content:space-between;padding:20px 22px 16px;border-bottom:3px solid var(--gold-deep);position:relative;}
   .ps-head-left{display:flex;align-items:center;gap:12px;}
+  .ps-photo{width:46px;height:46px;border-radius:50%;object-fit:cover;border:1px solid var(--line);display:none;}
   .ps-head-left .co-name{font-family:'Fraunces',serif;font-weight:700;font-size:14.5px;line-height:1.25;}
   .ps-head-left .co-sub{font-size:9.5px;color:var(--grey);letter-spacing:0.3px;}
-  #payslipPhoto{width:44px;height:44px;object-fit:cover;border-radius:3px;border:1px solid var(--line);display:none;}
-  .ps-head-right{
-    font-family:'Fraunces',serif;
-    font-weight:700;
-    font-size:20px;
-    color:var(--gold-deep);
-    letter-spacing:1px;
+  .ps-head-right{font-family:'Fraunces',serif;font-weight:700;font-size:20px;color:var(--gold-deep);letter-spacing:1px;}
+
+  .ps-payperiod{
+    background:var(--gold-pale); border-bottom:1px solid var(--gold-deep);
+    padding:10px 22px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;
   }
-  .ps-info{
-    padding:16px 22px;
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px 16px;
-    border-bottom:1px solid var(--line);
-    position:relative;
-  }
+  .ps-payperiod .pp-label{font-size:9px;text-transform:uppercase;letter-spacing:0.5px;color:var(--ink-soft);font-weight:700;}
+  .ps-payperiod .pp-value{font-size:13px;font-weight:700;color:var(--ink);font-family:'IBM Plex Mono',monospace;}
+
+  .ps-info{padding:16px 22px;display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;border-bottom:1px solid var(--line);position:relative;}
   .ps-info .fi-label{font-size:9px;text-transform:uppercase;letter-spacing:0.5px;color:var(--grey);font-weight:600;}
   .ps-info .fi-value{font-size:12.5px;font-weight:600;margin-top:1px;}
   .ps-body{padding:16px 22px;position:relative;}
   .ps-table{width:100%;border-collapse:collapse;margin-bottom:14px;}
-  .ps-table thead td{
-    background:var(--ink);
-    color:var(--white);
-    font-size:10.5px;
-    text-transform:uppercase;
-    letter-spacing:0.4px;
-    padding:7px 10px;
-    font-weight:700;
-  }
+  .ps-table thead td{background:var(--ink);color:var(--white);font-size:10.5px;text-transform:uppercase;letter-spacing:0.4px;padding:7px 10px;font-weight:700;}
   .ps-table.deductions thead td{background:var(--red);}
-  .ps-table td{
-    padding:6px 10px;
-    font-size:12px;
-    border-bottom:1px solid var(--paper-dim);
-  }
-  .ps-table td.amt{
-    text-align:right;
-    font-family:'IBM Plex Mono',monospace;
-    font-variant-numeric:tabular-nums;
-  }
-  .ps-table tr.total td{
-    font-weight:700;
-    background:var(--paper-dim);
-    border-top:1px solid var(--line);
-  }
+  .ps-table td{padding:6px 10px;font-size:12px;border-bottom:1px solid var(--paper-dim);}
+  .ps-table td.amt{text-align:right;font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;}
+  .ps-table tr.total td{font-weight:700;background:var(--paper-dim);border-top:1px solid var(--line);}
   .ps-table tr.total.earn td{color:var(--gold-deep);}
   .ps-table tr.total.ded td{color:var(--red);}
-  .ps-net{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    background:var(--ink);
-    color:var(--white);
-    padding:14px 18px;
-    margin:4px 0 6px;
-  }
+  .ps-table tr.sub-note td{font-size:9.5px;color:var(--grey);font-style:italic;padding:2px 10px 8px;border-bottom:1px solid var(--paper-dim);}
+  .ps-net{display:flex;align-items:center;justify-content:space-between;background:var(--ink);color:var(--white);padding:14px 18px;margin:4px 0 6px;}
   .ps-net .lbl{font-family:'Fraunces',serif;font-weight:600;font-size:14px;letter-spacing:0.5px;}
-  .ps-net .val{
-    font-family:'IBM Plex Mono',monospace;
-    font-weight:700;
-    font-size:17px;
-    color:var(--gold);
+  .ps-net .val{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:17px;color:var(--gold);}
+  .ps-footnote{font-size:9.5px;color:var(--grey);font-style:italic;padding:0 22px 8px;}
+  .ps-disclaimer{
+    font-size:9px; color:var(--grey); line-height:1.5; padding:10px 22px;
+    border-top:1px dashed var(--line); margin:0 22px 10px;
   }
-  .ps-footnote{
-    font-size:9.5px;
-    color:var(--grey);
-    font-style:italic;
-    padding:0 22px 18px;
-  }
-  .ps-sign{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:24px;
-    padding:0 22px 20px;
-  }
+  .ps-sign{display:grid;grid-template-columns:1fr 1fr;gap:24px;padding:0 22px 20px;}
   .ps-sign .sig-line{border-top:1px solid var(--line);padding-top:6px;font-size:10px;color:var(--grey);}
-  .ps-stamp{
-    padding:14px 22px 20px;
-    border-top:1px dashed var(--line);
-    text-align:left;
-    font-size:9px;
-    color:var(--grey);
-    line-height:1.6;
-  }
 
   .preview-actions{display:flex;gap:10px;margin-top:16px;}
-  .status-msg{
-    font-size:12px;
-    padding:8px 10px;
-    border-radius:var(--radius);
-    margin-bottom:12px;
-    display:none;
-  }
+  .status-msg{font-size:12px;padding:8px 10px;border-radius:var(--radius);margin-bottom:12px;display:none;}
   .status-msg.show{display:block;}
   .status-msg.ok{background:#eaf4ea;color:#2c6b2f;border:1px solid #bfe0c0;}
   .status-msg.err{background:#fbeaea;color:var(--red);border:1px solid #f0c6cb;}
+  .status-msg.warn{background:#fff5e0;color:#8a6d1f;border:1px solid #f0dca0;}
 
   @media (max-width:1100px){
     .app{grid-template-columns:1fr;}
@@ -420,61 +286,83 @@
 </head>
 <body>
 
-<!-- ---------- AUTH OVERLAY ---------- -->
-<div id="authOverlay" class="auth-overlay">
-  <div class="auth-card">
-    <div id="authMsg" class="auth-msg"></div>
-
-    <!-- First-run: create password (no demo credentials are baked in) -->
-    <div id="setupView" style="display:none;">
-      <h2>Set Up Admin Access</h2>
-      <p class="auth-sub">Username: <strong>x3madmin</strong></p>
-      <div class="field"><label>Create Password</label><input type="password" id="setupPwd1" placeholder="Minimum 6 characters"></div>
-      <div class="field"><label>Confirm Password</label><input type="password" id="setupPwd2" placeholder="Re-enter password"></div>
-      <button type="button" class="btn-primary btn-block" onclick="commitSetupPassword()">Create Password &amp; Continue</button>
-      <p class="auth-note">This is a basic browser-side access gate, not strong security. Your password is hashed and stored only in this browser — it is never sent anywhere. Anyone with access to this device, or to this file's source code, can potentially bypass it. Don't rely on it alone to protect the payroll data below.</p>
-    </div>
-
-    <!-- Login -->
-    <div id="loginView" style="display:none;">
-      <h2>X3M Payroll Access</h2>
-      <p class="auth-sub">Sign in to continue</p>
-      <div class="field"><label>Username</label><input type="text" id="loginUsername" placeholder="x3madmin"></div>
-      <div class="field"><label>Password</label><input type="password" id="loginPassword" placeholder="Password"></div>
-      <button type="button" class="btn-primary btn-block" onclick="attemptLogin()">Sign In</button>
-      <div class="auth-links"><a onclick="showAuthView('recover')">Forgot password?</a></div>
-      <p class="auth-note">This is a basic browser-side access gate, not strong security. Avoid using this on a shared or public device for sensitive payroll data.</p>
-    </div>
-
-    <!-- Recovery: verify username -->
-    <div id="recoverView" style="display:none;">
-      <h2>Recover Access</h2>
-      <p class="auth-sub">Enter the admin username to reset the password.</p>
-      <div class="field"><label>Username</label><input type="text" id="recoverUsername" placeholder="Username"></div>
-      <button type="button" class="btn-primary btn-block" onclick="verifyRecoveryUsername()">Continue</button>
-      <div class="auth-links"><a onclick="showAuthView('login')">Back to sign in</a></div>
-    </div>
-
-    <!-- Reset: set new password -->
-    <div id="resetView" style="display:none;">
-      <h2>Set New Password</h2>
-      <div class="field"><label>New Password</label><input type="password" id="resetPwd1" placeholder="Minimum 6 characters"></div>
-      <div class="field"><label>Confirm New Password</label><input type="password" id="resetPwd2" placeholder="Re-enter password"></div>
-      <button type="button" class="btn-primary btn-block" onclick="commitResetPassword()">Save New Password</button>
-      <div class="auth-links"><a onclick="showAuthView('login')">Back to sign in</a></div>
-    </div>
+<div class="topbar no-print">
+  <div class="brand">
+    <div class="brand-text"><h1>X3M Financial Consultancy Services Payslip</h1></div>
+  </div>
+  <div class="topbar-right">
+    <div class="topbar-note">Employee &amp; Payroll Dashboard</div>
+    <button type="button" class="btn-logout" onclick="logout()">Log Out</button>
   </div>
 </div>
 
-<div class="topbar no-print">
-  <div class="brand">
-    <div class="brand-text">
-      <h1>X3M Financial Consultancy Services Payslip</h1>
+<!-- ---------- AUTH OVERLAY ---------- -->
+<div id="authOverlay" class="auth-overlay">
+  <div class="auth-card">
+    <div id="authErrorBox" class="auth-error"></div>
+
+    <!-- First-time setup: no password exists yet -->
+    <div id="setupView" style="display:none;">
+      <h2>Create Your Password</h2>
+      <p class="auth-sub">This is the first sign-in for this device. Choose a password for <strong>x3madmin</strong> to continue.</p>
+      <div class="field">
+        <label>Username</label>
+        <input type="text" id="setupUsername" value="x3madmin" readonly>
+      </div>
+      <div class="field">
+        <label>New Password</label>
+        <input type="password" id="setupPassword1" placeholder="At least 6 characters">
+      </div>
+      <div class="field">
+        <label>Confirm Password</label>
+        <input type="password" id="setupPassword2" placeholder="Re-enter password">
+      </div>
+      <button type="button" class="btn-primary btn-block" onclick="commitSetupPassword()">Create Password &amp; Continue</button>
     </div>
-  </div>
-  <div class="topbar-note">
-    Payroll System 2026
-    <div style="margin-top:6px;"><a onclick="logoutUser()">Log Out</a></div>
+
+    <!-- Normal login -->
+    <div id="loginView" style="display:none;">
+      <h2>X3M Payroll Access</h2>
+      <p class="auth-sub">Sign in to manage employee and payroll records.</p>
+      <div class="field">
+        <label>Username</label>
+        <input type="text" id="authUsername" value="x3madmin">
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="authPassword" placeholder="Password">
+      </div>
+      <button type="button" class="btn-primary btn-block" onclick="attemptLogin()">Sign In</button>
+      <div class="auth-links"><a onclick="showRecoveryView()">Forgot password?</a></div>
+      <p class="auth-note">This sign-in runs in your browser only, as a basic access gate rather than strong security. Avoid using it to protect this data on a shared or public computer.</p>
+    </div>
+
+    <!-- Recovery: confirm username -->
+    <div id="recoveryView" style="display:none;">
+      <h2>Reset Password</h2>
+      <p class="auth-sub">Enter the account username to continue.</p>
+      <div class="field">
+        <label>Username</label>
+        <input type="text" id="recoveryUsername" placeholder="Enter username">
+      </div>
+      <button type="button" class="btn-primary btn-block" onclick="verifyRecoveryUsername()">Continue</button>
+      <div class="auth-links"><a onclick="showLoginView()">Back to sign in</a></div>
+    </div>
+
+    <!-- Set new password after recovery -->
+    <div id="resetView" style="display:none;">
+      <h2>Set New Password</h2>
+      <div class="field">
+        <label>New Password</label>
+        <input type="password" id="newPassword1" placeholder="At least 6 characters">
+      </div>
+      <div class="field">
+        <label>Confirm New Password</label>
+        <input type="password" id="newPassword2" placeholder="Re-enter password">
+      </div>
+      <button type="button" class="btn-primary btn-block" onclick="commitNewPassword()">Save New Password</button>
+      <div class="auth-links"><a onclick="showLoginView()">Back to sign in</a></div>
+    </div>
   </div>
 </div>
 
@@ -496,7 +384,7 @@
 
   <!-- ---------- WORKSPACE PANEL ---------- -->
   <div class="panel workspace no-print">
-    <div id="lockBadge" class="lock-overlay">🔒 PROFILE INACTIVE — MANAGEMENT ACCESS RESTRICTED</div>
+    <div id="lockBadge" class="lock-overlay">LOCKED — PROFILE INACTIVE — MANAGEMENT ACCESS RESTRICTED</div>
 
     <div id="statusMessage" class="status-msg"></div>
 
@@ -504,10 +392,22 @@
       <p class="eyebrow">Profile Setup</p>
       <h2 class="section-title">Employee Structural Data</h2>
 
+      <div class="photo-upload-block">
+        <div class="photo-thumb-wrap">
+          <img id="photoPreview" src="" alt="Employee photo">
+          <div class="ph-empty" id="photoEmptyLabel">No<br>Photo</div>
+        </div>
+        <div class="photo-actions">
+          <label style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:var(--grey);">Employee Photo</label>
+          <input type="file" id="empPhoto" accept="image/*" onchange="handlePhotoUpload(event)">
+          <button type="button" class="btn-text" style="text-align:left;padding:0;" onclick="clearPhoto()">Remove photo</button>
+        </div>
+      </div>
+
       <div class="row-2">
         <div class="field">
           <label>Employee ID</label>
-          <input type="text" id="empId" placeholder="e.g. X3M-2026-01" oninput="checkExistingEmployee()">
+          <input type="text" id="empId" placeholder="e.g. X3M-2026-01" oninput="updateSaveButtonLabel()">
         </div>
         <div class="field">
           <label>Status</label>
@@ -549,46 +449,71 @@
         </div>
       </div>
 
-      <div class="field">
-        <label>Employee Photo</label>
-        <div class="photo-row">
-          <img id="photoThumb" class="photo-thumb" src="" alt="" style="display:none;">
-          <div id="photoThumbEmpty" class="photo-thumb empty">No Photo</div>
-          <div class="photo-controls">
-            <input type="file" id="empPhotoInput" accept="image/*" onchange="handlePhotoUpload(event)">
-            <div><button type="button" class="btn-text" onclick="clearPhoto()">Remove Photo</button></div>
-          </div>
+      <p class="eyebrow" style="margin-top:20px;">Pay Period</p>
+      <div class="row-3">
+        <div class="field">
+          <label>Month</label>
+          <select id="payMonth" onchange="liveRecalculate()"></select>
+        </div>
+        <div class="field">
+          <label>Year</label>
+          <input type="number" id="payYear" oninput="liveRecalculate()">
+        </div>
+        <div class="field">
+          <label>Cutoff</label>
+          <select id="payCutoff" onchange="liveRecalculate()">
+            <option value="first">1st – 15th</option>
+            <option value="second">16th – End of Month</option>
+          </select>
         </div>
       </div>
 
-      <p class="eyebrow" style="margin-top:20px;">Compensation & Ledger Structure</p>
+      <p class="eyebrow" style="margin-top:20px;">Compensation &amp; Ledger Structure</p>
       <div class="row-3">
         <div class="field">
-          <label>Basic Pay (Semi-Monthly)</label>
-          <input type="number" id="empBasicPay" value="0" step="0.01" oninput="liveRecalculate()">
+          <label>Monthly Basic Salary</label>
+          <input type="number" id="empMonthlyBasic" value="0" step="0.01" oninput="liveRecalculate()">
         </div>
         <div class="field">
-          <label>Transportation Allowance</label>
+          <label>Semi-Monthly Basic (Auto)</label>
+          <input type="text" id="empSemiBasicDisplay" readonly>
+        </div>
+        <div class="field">
+          <label>Daily Rate (Auto ÷26)</label>
+          <input type="text" id="empDailyRateDisplay" readonly>
+        </div>
+      </div>
+      <p class="hint">Daily rate is estimated using a 26-day monthly divisor — adjust your company's payroll policy divisor as needed.</p>
+
+      <div class="row-3">
+        <div class="field">
+          <label>Transportation Allowance (per cutoff)</label>
           <input type="number" id="empTransAllowance" value="0" step="0.01" oninput="liveRecalculate()">
         </div>
         <div class="field">
-          <label>Default Allowance</label>
+          <label>Other Allowance (per cutoff)</label>
           <input type="number" id="empDefaultAllowance" value="0" step="0.01" oninput="liveRecalculate()">
         </div>
+        <div class="field">
+          <label>Minimum Wage Earner?</label>
+          <select id="empIsMWE" onchange="liveRecalculate()">
+            <option value="no">No — Taxable</option>
+            <option value="yes">Yes — Tax-Exempt (RA 9504)</option>
+          </select>
+        </div>
       </div>
+      <p class="hint">Allowances are non-taxable and excluded from withholding tax. Minimum wage earners are income-tax exempt on basic pay per RA 9504, but statutory contributions (SSS/PhilHealth/Pag-IBIG) still apply.</p>
 
       <div style="margin-top:14px;">
-        <label style="display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.4px;color:var(--grey);margin-bottom:8px;">Additional Earnings (Optional)</label>
-        <div id="extraEarningsContainer"></div>
-        <div class="btn-row" style="margin-top:0;">
-          <button type="button" class="btn-text" onclick="addExtraEarningRow('13th Month Pay', 0)">+ 13th Month Pay</button>
-          <button type="button" class="btn-text" onclick="addExtraEarningRow('Bonus', 0)">+ Bonus</button>
-          <button type="button" class="btn-text" onclick="addExtraEarningRow('', 0)">+ Custom Earning</button>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <label style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;color:var(--grey);">Other Earnings (13th Month, Bonus, etc.)</label>
+          <button type="button" class="btn-text" onclick="addEarningRow()">+ Add Line</button>
         </div>
+        <div id="earningsRowsContainer"></div>
       </div>
 
       <div class="btn-row">
-        <button type="button" class="btn-primary" id="btnSaveEmployee" onclick="saveEmployeeData()">Save Employee Data</button>
+        <button type="button" class="btn-primary" id="btnSaveEmployee" onclick="saveEmployeeData()">Save New Employee</button>
         <button type="button" class="btn-outline" onclick="resetForm()">Clear Master Fields</button>
       </div>
     </div>
@@ -609,7 +534,7 @@
       <div class="payslip" id="payslipPrintArea">
         <div class="ps-head">
           <div class="ps-head-left">
-            <img id="payslipPhoto" src="" alt="">
+            <img id="psPhoto" class="ps-photo" src="" alt="">
             <div>
               <div class="co-name">X3M FINANCIAL CONSULTANCY SERVICES</div>
               <div class="co-sub">Republic of the Philippines • Statutory Compliance Copy</div>
@@ -618,54 +543,27 @@
           <div class="ps-head-right">PAYSLIP</div>
         </div>
 
+        <div class="ps-payperiod">
+          <div><span class="pp-label">Coverage Period&nbsp;</span><span class="pp-value" id="ppCoverage">—</span></div>
+          <div><span class="pp-label">Pay Date&nbsp;</span><span class="pp-value" id="ppPayDate">—</span></div>
+        </div>
+
         <div class="ps-info">
-          <div>
-            <div class="fi-label">Employee ID</div>
-            <div class="fi-value" id="viewId">—</div>
-          </div>
-          <div>
-            <div class="fi-label">Status</div>
-            <div class="fi-value" id="viewStatus">—</div>
-          </div>
-          <div style="grid-column: span 2;">
-            <div class="fi-label">Full Name</div>
-            <div class="fi-value" id="viewName">—</div>
-          </div>
-          <div>
-            <div class="fi-label">Designation</div>
-            <div class="fi-value" id="viewDesignation">—</div>
-          </div>
-          <div>
-            <div class="fi-label">Department</div>
-            <div class="fi-value" id="viewDepartment">—</div>
-          </div>
-          <div>
-            <div class="fi-label">Bank Account No.</div>
-            <div class="fi-value" id="viewBank">—</div>
-          </div>
-          <div>
-            <div class="fi-label">TIN</div>
-            <div class="fi-value" id="viewTin">—</div>
-          </div>
-          <div>
-            <div class="fi-label">Date Started</div>
-            <div class="fi-value" id="viewDateStarted">—</div>
-          </div>
-          <div>
-            <div class="fi-label">Pay Cycle</div>
-            <div class="fi-value">Semi-Monthly Ledger</div>
-          </div>
+          <div><div class="fi-label">Employee ID</div><div class="fi-value" id="viewId">—</div></div>
+          <div><div class="fi-label">Status</div><div class="fi-value" id="viewStatus">—</div></div>
+          <div style="grid-column: span 2;"><div class="fi-label">Full Name</div><div class="fi-value" id="viewName">—</div></div>
+          <div><div class="fi-label">Designation</div><div class="fi-value" id="viewDesignation">—</div></div>
+          <div><div class="fi-label">Department</div><div class="fi-value" id="viewDepartment">—</div></div>
+          <div><div class="fi-label">Bank Account No.</div><div class="fi-value" id="viewBank">—</div></div>
+          <div><div class="fi-label">TIN</div><div class="fi-value" id="viewTin">—</div></div>
+          <div><div class="fi-label">Date Started</div><div class="fi-value" id="viewDateStarted">—</div></div>
+          <div><div class="fi-label">Daily Rate</div><div class="fi-value" id="viewDailyRate">—</div></div>
         </div>
 
         <div class="ps-body">
           <table class="ps-table earnings">
-            <thead>
-              <tr>
-                <td>Earnings Manifest</td>
-                <td class="amt">Amount (PHP)</td>
-              </tr>
-            </thead>
-            <tbody>
+            <thead><tr><td>Earnings Manifest</td><td class="amt">Amount (PHP)</td></tr></thead>
+            <tbody id="earningsTableBody">
               <tr>
                 <td>Basic Salary (Semi-Monthly Allocation)</td>
                 <td class="amt" id="valBasic">0.00</td>
@@ -675,12 +573,9 @@
                 <td class="amt" id="valTrans">0.00</td>
               </tr>
               <tr>
-                <td>Standard Operational Allowance</td>
+                <td>Other Allowance</td>
                 <td class="amt" id="valAllow">0.00</td>
               </tr>
-            </tbody>
-            <tbody id="extraEarningsPreviewRows"></tbody>
-            <tbody>
               <tr class="total earn">
                 <td>Gross Semi-Monthly Earnings</td>
                 <td class="amt" id="valGross">0.00</td>
@@ -689,12 +584,7 @@
           </table>
 
           <table class="ps-table deductions">
-            <thead>
-              <tr>
-                <td>Deductions</td>
-                <td class="amt">Amount (PHP)</td>
-              </tr>
-            </thead>
+            <thead><tr><td>Deductions</td><td class="amt">Amount (PHP)</td></tr></thead>
             <tbody>
               <tr>
                 <td>SSS Premium Share (Semi-Monthly Apportioned)</td>
@@ -712,8 +602,9 @@
                 <td>Withholding Tax (TRAIN Law Brackets)</td>
                 <td class="amt" id="valTax">0.00</td>
               </tr>
+              <tr class="sub-note"><td colspan="2" id="valTaxBracket">—</td></tr>
               <tr class="total ded">
-                <td>Total Statutory & Tax Reductions</td>
+                <td>Total Statutory &amp; Tax Reductions</td>
                 <td class="amt" id="valDeductions">0.00</td>
               </tr>
             </tbody>
@@ -726,16 +617,16 @@
         </div>
 
         <div class="ps-footnote">
-          Notice: Contributions evaluated from prevailing monthly basis bands allocated to individual payroll periods. Balance configuration checked.
+          Notice: Contributions evaluated from prevailing monthly basis bands allocated to individual payroll periods. Allowances and other earnings shown are non-taxable. Balance configuration checked.
+        </div>
+
+        <div class="ps-disclaimer">
+          Disclaimer: This payslip is issued solely for the personal record of the employee named above. X3M Financial Consultancy Services shall not be held liable for any use, misuse, reproduction, or reliance placed on this document by the employee or any third party after its release. Bank account details on this copy are partially masked for the account holder's security.
         </div>
 
         <div class="ps-sign">
           <div class="sig-line">Employer Authorized Signatory</div>
           <div class="sig-line">Employee Acknowledgment Signature</div>
-        </div>
-
-        <div class="ps-stamp">
-          <strong>Disclaimer:</strong> This payslip is issued solely for the personal record of the named employee. X3M Financial Consultancy Services assumes no liability for any use, alteration, disclosure, or distribution of this document by the employee or any third party after it has been received. For the account holder's security, the bank account number is partially masked on printed and PDF copies of this document.
         </div>
       </div>
 
@@ -748,76 +639,101 @@
 
 <script>
   /**
-   * GOOGLE SHEETS DEPLOYMENT INTEGRATION
+   * GOOGLE SHEETS DEPLOYMENT INTEGRATION CONSTANT
    * To bridge this application directly to a real Google Sheet:
    * 1. Open Google Sheets -> Extensions -> Apps Script.
-   * 2. Use the standard deployment format tracking the structural schema matching the headers exactly.
-   * 3. Deploy code as a Web App, select "Anyone" under access privileges, and insert the URL below.
-   *
-   * Fields now sent per record: id, fullName, designation, department, bankNo, tin,
-   * basicPay, transAllowance, defaultAllowance, extraEarnings (array of {name, amount}),
-   * photo (base64 JPEG data URL, resized client-side), dateStarted, status, history.
-   *
-   * IMPORTANT — to keep exactly one row per employee (no duplicates), the Apps Script
-   * "write"/"update" handler should UPSERT by `id`: search the ID column for a match;
-   * if found, overwrite that row in place; only append a new row when no match exists.
-   * This app tells the script which case it is via the "action" field ("write" for a
-   * brand-new employee, "update" for an existing one), but the script should still
-   * search-and-overwrite by id as the source of truth.
+   * 2. Implement doGet (return all rows as JSON) and doPost (upsert-by-ID: if the
+   *    incoming "id" already exists in the sheet, overwrite that row in place;
+   *    otherwise append a new row). See the companion Code.gs sample provided
+   *    alongside this file for a working reference implementation, including a
+   *    "photo" column for the base64 employee photo.
+   * 3. Deploy as a Web App ("Anyone" access) and paste the URL below.
    */
   const GOOGLE_SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzkh2scyDOibLSGMgECpAtTKI23AvJtLDO9QbYe2RLjTNQ5VspA5fU4-BBwohoi1-JM/exec";
-  const SHEET_URL_PLACEHOLDER = "YOUR_APPS_SCRIPT_WEBAPP_URL_HERE";
+
+  const MONTH_NAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+  // ===================================================================
+  // AUTH
+  // ===================================================================
   const AUTH_USERNAME = "x3madmin";
 
-  // System State Repositories
-  let employeesDb = [];
-  let selectedEmployeeId = null;
-  let currentPhotoBase64 = "";
-  let extraEarnings = [];
-
-  // Initialize
-  window.addEventListener("DOMContentLoaded", () => {
-    initAuth();
-    bootstrapSystemDatabase();
-  });
-
-  /* =====================================================
-     AUTH: login / first-time setup / recovery / reset
-     ===================================================== */
-  async function sha256Hex(str) {
+  async function hashText(text) {
     try {
-      const enc = new TextEncoder().encode(str);
+      const enc = new TextEncoder().encode(text);
       const buf = await crypto.subtle.digest("SHA-256", enc);
       return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("");
     } catch (e) {
-      // Fallback only if Web Crypto isn't available in this context
-      return "plain:" + str;
+      // Fallback for contexts without crypto.subtle (e.g. non-secure/file:// contexts)
+      let h = 0;
+      for (let i = 0; i < text.length; i++) { h = ((h << 5) - h + text.charCodeAt(i)) | 0; }
+      return "fb_" + h.toString(16);
     }
   }
 
-  function showAuthMsg(msg, type) {
-    const box = document.getElementById("authMsg");
-    box.textContent = msg;
-    box.className = `auth-msg show ${type}`;
-  }
-  function clearAuthMsg() {
-    document.getElementById("authMsg").className = "auth-msg";
+  function getStoredHash() {
+    return localStorage.getItem("x3m_auth_password_hash") || "";
   }
 
-  function showAuthView(view) {
-    ["setup", "login", "recover", "reset"].forEach(v => {
-      document.getElementById(v + "View").style.display = (v === view) ? "block" : "none";
-    });
-    clearAuthMsg();
-  }
+  function initAuthView() {
+    document.getElementById("setupUsername").value = AUTH_USERNAME;
+    document.getElementById("authUsername").value = localStorage.getItem("x3m_username") || AUTH_USERNAME;
 
-  function initAuth() {
-    const storedHash = localStorage.getItem("x3m_pwd_hash");
-    if (sessionStorage.getItem("x3m_authed") === "true" && storedHash) {
+    if (sessionStorage.getItem("x3m_authed") === "true") {
       unlockApp();
       return;
     }
-    showAuthView(storedHash ? "login" : "setup");
+
+    if (!getStoredHash()) {
+      showView("setupView");
+    } else {
+      showView("loginView");
+    }
+  }
+
+  function showView(viewId) {
+    ["setupView", "loginView", "recoveryView", "resetView"].forEach(v => {
+      document.getElementById(v).style.display = (v === viewId) ? "block" : "none";
+    });
+    const errBox = document.getElementById("authErrorBox");
+    errBox.classList.remove("show", "ok-msg");
+  }
+
+  function showAuthError(msg) {
+    const errBox = document.getElementById("authErrorBox");
+    errBox.classList.remove("ok-msg");
+    errBox.textContent = msg;
+    errBox.classList.add("show");
+  }
+
+  function showAuthOk(msg) {
+    const errBox = document.getElementById("authErrorBox");
+    errBox.classList.add("ok-msg");
+    errBox.textContent = msg;
+    errBox.classList.add("show");
+  }
+
+  async function commitSetupPassword() {
+    const p1 = document.getElementById("setupPassword1").value;
+    const p2 = document.getElementById("setupPassword2").value;
+    if (p1.length < 6) { showAuthError("Password must be at least 6 characters."); return; }
+    if (p1 !== p2) { showAuthError("Passwords do not match."); return; }
+    const hash = await hashText(p1);
+    localStorage.setItem("x3m_auth_password_hash", hash);
+    localStorage.setItem("x3m_username", AUTH_USERNAME);
+    sessionStorage.setItem("x3m_authed", "true");
+    unlockApp();
+  }
+
+  async function attemptLogin() {
+    const u = document.getElementById("authUsername").value.trim();
+    const p = document.getElementById("authPassword").value;
+    if (u.toLowerCase() !== AUTH_USERNAME.toLowerCase()) { showAuthError("Invalid username or password."); return; }
+    const hash = await hashText(p);
+    if (hash !== getStoredHash()) { showAuthError("Invalid username or password."); return; }
+    localStorage.setItem("x3m_username", u);
+    sessionStorage.setItem("x3m_authed", "true");
+    unlockApp();
   }
 
   function unlockApp() {
@@ -825,64 +741,67 @@
     document.getElementById("mainApp").classList.remove("app-hidden");
   }
 
-  async function commitSetupPassword() {
-    const p1 = document.getElementById("setupPwd1").value;
-    const p2 = document.getElementById("setupPwd2").value;
-    if (p1.length < 6) { showAuthMsg("Password must be at least 6 characters.", "err"); return; }
-    if (p1 !== p2) { showAuthMsg("Passwords do not match.", "err"); return; }
-    localStorage.setItem("x3m_pwd_hash", await sha256Hex(p1));
-    sessionStorage.setItem("x3m_authed", "true");
-    unlockApp();
-  }
-
-  async function attemptLogin() {
-    const u = document.getElementById("loginUsername").value.trim();
-    const p = document.getElementById("loginPassword").value;
-    if (u.toLowerCase() !== AUTH_USERNAME) { showAuthMsg("Invalid username or password.", "err"); return; }
-    const storedHash = localStorage.getItem("x3m_pwd_hash");
-    const hash = await sha256Hex(p);
-    if (!storedHash || hash !== storedHash) { showAuthMsg("Invalid username or password.", "err"); return; }
-    sessionStorage.setItem("x3m_authed", "true");
-    unlockApp();
-  }
-
-  function verifyRecoveryUsername() {
-    const u = document.getElementById("recoverUsername").value.trim();
-    if (u.toLowerCase() !== AUTH_USERNAME) { showAuthMsg("Username not recognized.", "err"); return; }
-    showAuthView("reset");
-  }
-
-  async function commitResetPassword() {
-    const p1 = document.getElementById("resetPwd1").value;
-    const p2 = document.getElementById("resetPwd2").value;
-    if (p1.length < 6) { showAuthMsg("Password must be at least 6 characters.", "err"); return; }
-    if (p1 !== p2) { showAuthMsg("Passwords do not match.", "err"); return; }
-    localStorage.setItem("x3m_pwd_hash", await sha256Hex(p1));
-    showAuthView("login");
-    showAuthMsg("Password updated. Please sign in.", "ok");
-  }
-
-  function logoutUser() {
+  function logout() {
     sessionStorage.removeItem("x3m_authed");
     document.getElementById("mainApp").classList.add("app-hidden");
     document.getElementById("authOverlay").style.display = "flex";
-    document.getElementById("loginPassword").value = "";
-    showAuthView("login");
+    document.getElementById("authPassword").value = "";
+    showView("loginView");
   }
 
-  /* =====================================================
-     DATA BOOTSTRAP
-     ===================================================== */
+  function showRecoveryView() { showView("recoveryView"); }
+  function showLoginView() { showView("loginView"); }
+
+  function verifyRecoveryUsername() {
+    const u = document.getElementById("recoveryUsername").value.trim();
+    if (u.toLowerCase() !== AUTH_USERNAME.toLowerCase()) { showAuthError("Username not recognized."); return; }
+    showView("resetView");
+  }
+
+  async function commitNewPassword() {
+    const p1 = document.getElementById("newPassword1").value;
+    const p2 = document.getElementById("newPassword2").value;
+    if (p1.length < 6) { showAuthError("Password must be at least 6 characters."); return; }
+    if (p1 !== p2) { showAuthError("Passwords do not match."); return; }
+    const hash = await hashText(p1);
+    localStorage.setItem("x3m_auth_password_hash", hash);
+    showView("loginView");
+    showAuthOk("Password updated. Please sign in.");
+  }
+
+  // ===================================================================
+  // SYSTEM STATE
+  // ===================================================================
+  let employeesDb = [];
+  let selectedEmployeeId = null;
+  let currentPhotoBase64 = "";
+  let currentEarnings = []; // [{label, amount}]
+
+  window.addEventListener("DOMContentLoaded", () => {
+    initAuthView();
+    populatePayPeriodControls();
+    bootstrapSystemDatabase();
+  });
+
+  function populatePayPeriodControls() {
+    const monthSel = document.getElementById("payMonth");
+    monthSel.innerHTML = MONTH_NAMES.map((m, i) => `<option value="${i}">${m}</option>`).join("");
+    const now = new Date();
+    monthSel.value = String(now.getMonth());
+    document.getElementById("payYear").value = now.getFullYear();
+  }
+
   function bootstrapSystemDatabase() {
-    if (GOOGLE_SHEET_WEBAPP_URL && !GOOGLE_SHEET_WEBAPP_URL.includes(SHEET_URL_PLACEHOLDER)) {
+    if (GOOGLE_SHEET_WEBAPP_URL && !GOOGLE_SHEET_WEBAPP_URL.includes("YOUR_APPS_SCRIPT_WEBAPP_URL_HERE")) {
       fetch(GOOGLE_SHEET_WEBAPP_URL + "?action=read")
         .then(res => res.json())
         .then(data => {
           employeesDb = data;
           renderSystemViews();
+          updateSaveButtonLabel();
         })
         .catch(err => {
-          showNotification("Remote Syncing Offline. Activating Local Cache Mock Engine.", "err");
+          showNotification("Remote syncing offline. Using local cache instead.", "err");
           loadFallbackData();
         });
     } else {
@@ -895,7 +814,6 @@
     if (cached) {
       employeesDb = JSON.parse(cached);
     } else {
-      // Seed Data matching tracking parameters exactly
       employeesDb = [
         {
           id: "X3M-1092",
@@ -904,17 +822,15 @@
           department: "Logistics Infrastructure",
           bankNo: "1290481239",
           tin: "402-119-228-000",
-          basicPay: 24500.00,
+          monthlyBasic: 49000.00,
           transAllowance: 2500.00,
           defaultAllowance: 3000.00,
-          extraEarnings: [],
-          photo: "",
+          additionalEarnings: [],
+          isMinimumWageEarner: false,
           dateStarted: "2021-03-15",
           status: "Active",
-          history: [
-            { date: "2026-06-15", gross: 30000.00, deductions: 3254.12, net: 26745.88 },
-            { date: "2026-06-30", gross: 30000.00, deductions: 3254.12, net: 26745.88 }
-          ]
+          photo: "",
+          history: []
         },
         {
           id: "X3M-2011",
@@ -923,21 +839,21 @@
           department: "Systems Control",
           bankNo: "9834710293",
           tin: "109-883-472-000",
-          basicPay: 14000.00,
+          monthlyBasic: 28000.00,
           transAllowance: 1500.00,
           defaultAllowance: 1200.00,
-          extraEarnings: [],
-          photo: "",
+          additionalEarnings: [],
+          isMinimumWageEarner: false,
           dateStarted: "2024-08-01",
           status: "Inactive",
-          history: [
-            { date: "2026-01-15", gross: 16700.00, deductions: 1102.40, net: 15597.60 }
-          ]
+          photo: "",
+          history: []
         }
       ];
       persistState();
     }
     renderSystemViews();
+    updateSaveButtonLabel();
   }
 
   function persistState() {
@@ -966,10 +882,18 @@
       div.className = `roster-item ${emp.id === selectedEmployeeId ? 'active' : ''} ${emp.status === 'Inactive' ? 'item-inactive' : ''}`;
       div.onclick = () => handleSelectFromDropdown(emp.id);
 
+      const initials = (emp.fullName || "?").trim().charAt(0).toUpperCase();
+      const thumbHtml = emp.photo
+        ? `<img class="roster-thumb" src="${emp.photo}" alt="">`
+        : `<div class="roster-thumb-placeholder">${initials}</div>`;
+
       div.innerHTML = `
-        <div class="name">${emp.fullName}</div>
-        <div class="meta">${emp.id} • ${emp.designation}</div>
-        <div class="meta" style="font-weight:600; color:${emp.status === 'Active' ? 'var(--gold-deep)' : 'var(--red)'};">Status: ${emp.status}</div>
+        ${thumbHtml}
+        <div>
+          <div class="name">${emp.fullName}</div>
+          <div class="meta">${emp.id} • ${emp.designation || ""}</div>
+          <div class="meta" style="font-weight:600; color:${emp.status === 'Active' ? 'var(--gold-deep)' : 'var(--red)'};">Status: ${emp.status}</div>
+        </div>
       `;
       roster.appendChild(div);
     });
@@ -986,27 +910,28 @@
 
     document.getElementById("empId").value = emp.id;
     document.getElementById("empFullName").value = emp.fullName;
-    document.getElementById("empDesignation").value = emp.designation;
-    document.getElementById("empDepartment").value = emp.department;
-    document.getElementById("empBankNo").value = emp.bankNo;
-    document.getElementById("empTin").value = emp.tin;
-    document.getElementById("empBasicPay").value = emp.basicPay;
-    document.getElementById("empTransAllowance").value = emp.transAllowance;
-    document.getElementById("empDefaultAllowance").value = emp.defaultAllowance;
-    document.getElementById("empDateStarted").value = emp.dateStarted;
+    document.getElementById("empDesignation").value = emp.designation || "";
+    document.getElementById("empDepartment").value = emp.department || "";
+    document.getElementById("empBankNo").value = emp.bankNo || "";
+    document.getElementById("empTin").value = emp.tin || "";
+    document.getElementById("empMonthlyBasic").value = emp.monthlyBasic || 0;
+    document.getElementById("empTransAllowance").value = emp.transAllowance || 0;
+    document.getElementById("empDefaultAllowance").value = emp.defaultAllowance || 0;
+    document.getElementById("empDateStarted").value = emp.dateStarted || "";
     document.getElementById("empStatus").value = emp.status;
+    document.getElementById("empIsMWE").value = emp.isMinimumWageEarner ? "yes" : "no";
 
-    extraEarnings = (emp.extraEarnings || []).map((e, i) => ({ id: 'ex_load_' + i + '_' + Date.now(), name: e.name, amount: e.amount }));
-    renderExtraEarnings();
+    currentEarnings = Array.isArray(emp.additionalEarnings) ? JSON.parse(JSON.stringify(emp.additionalEarnings)) : [];
+    renderEarningsRows();
 
     currentPhotoBase64 = emp.photo || "";
-    setPhotoPreview(currentPhotoBase64);
+    applyPhotoToPreviewElements(currentPhotoBase64);
 
     evaluateProfileAccessControl(emp.status);
-    checkExistingEmployee();
-    executeLedgerCalculations(emp);
+    executeLedgerCalculations(buildProfileFromForm());
     renderHistoryTrack(emp.history);
     renderSystemViews();
+    updateSaveButtonLabel();
   }
 
   function handleStatusChange(status) {
@@ -1030,67 +955,9 @@
     }
   }
 
-  /* =====================================================
-     EXTRA EARNINGS (13th Month Pay, Bonus, Custom)
-     ===================================================== */
-  function addExtraEarningRow(name = "", amount = 0) {
-    const rowId = 'ex_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
-    extraEarnings.push({ id: rowId, name: name, amount: amount });
-    renderExtraEarnings();
-    liveRecalculate();
-  }
-
-  function removeExtraEarningRow(rowId) {
-    extraEarnings = extraEarnings.filter(e => e.id !== rowId);
-    renderExtraEarnings();
-    liveRecalculate();
-  }
-
-  function updateExtraEarningField(rowId, field, value) {
-    const item = extraEarnings.find(e => e.id === rowId);
-    if (!item) return;
-    item[field] = field === 'amount' ? (parseFloat(value) || 0) : value;
-    liveRecalculate();
-  }
-
-  function renderExtraEarnings() {
-    const wrap = document.getElementById("extraEarningsContainer");
-    wrap.innerHTML = '';
-    extraEarnings.forEach(e => {
-      const row = document.createElement('div');
-      row.className = 'extra-earning-row';
-      row.innerHTML = `
-        <input type="text" placeholder="Earning label (e.g. 13th Month Pay)" value="${escapeAttr(e.name)}" oninput="updateExtraEarningField('${e.id}','name',this.value)">
-        <input type="number" step="0.01" placeholder="Amount" value="${e.amount}" oninput="updateExtraEarningField('${e.id}','amount',this.value)">
-        <button type="button" class="btn-text" onclick="removeExtraEarningRow('${e.id}')">Remove</button>
-      `;
-      wrap.appendChild(row);
-    });
-  }
-
-  function computeExtraEarningsTotal() {
-    return extraEarnings.reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0);
-  }
-
-  function renderExtraEarningsPreview() {
-    const tbody = document.getElementById("extraEarningsPreviewRows");
-    tbody.innerHTML = '';
-    extraEarnings.forEach(e => {
-      if (!e.name && !e.amount) return;
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td>${escapeAttr(e.name || "Additional Earning")}</td><td class="amt">${formatCurrency(e.amount || 0)}</td>`;
-      tbody.appendChild(tr);
-    });
-  }
-
-  function escapeAttr(s) {
-    return String(s || "").replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  }
-
-  /* =====================================================
-     PHOTO UPLOAD (resized/compressed client-side to fit
-     comfortably under Google Sheets' 50,000-char cell limit)
-     ===================================================== */
+  // ===================================================================
+  // PHOTO HANDLING (resized silently before it is stored)
+  // ===================================================================
   function handlePhotoUpload(event) {
     const file = event.target.files[0];
     if (!file) return;
@@ -1101,15 +968,13 @@
         const canvas = document.createElement("canvas");
         const maxDim = 160;
         let w = img.width, h = img.height;
-        if (w > h) { if (w > maxDim) { h = Math.round(h * (maxDim / w)); w = maxDim; } }
-        else { if (h > maxDim) { w = Math.round(w * (maxDim / h)); h = maxDim; } }
+        if (w > h) { if (w > maxDim) { h = h * (maxDim / w); w = maxDim; } }
+        else { if (h > maxDim) { w = w * (maxDim / h); h = maxDim; } }
         canvas.width = w; canvas.height = h;
-        canvas.getContext("2d").drawImage(img, 0, 0, w, h);
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, w, h);
         currentPhotoBase64 = canvas.toDataURL("image/jpeg", 0.7);
-        setPhotoPreview(currentPhotoBase64);
-        if (currentPhotoBase64.length > 45000) {
-          showNotification("Photo saved, but it's large for Google Sheets' 50,000-character cell limit. Consider a simpler image.", "err");
-        }
+        applyPhotoToPreviewElements(currentPhotoBase64);
       };
       img.src = e.target.result;
     };
@@ -1118,127 +983,237 @@
 
   function clearPhoto() {
     currentPhotoBase64 = "";
-    document.getElementById("empPhotoInput").value = "";
-    setPhotoPreview("");
+    document.getElementById("empPhoto").value = "";
+    applyPhotoToPreviewElements("");
   }
 
-  function setPhotoPreview(src) {
-    const thumb = document.getElementById("photoThumb");
-    const empty = document.getElementById("photoThumbEmpty");
-    const psPhoto = document.getElementById("payslipPhoto");
+  function applyPhotoToPreviewElements(src) {
+    const thumb = document.getElementById("photoPreview");
+    const emptyLabel = document.getElementById("photoEmptyLabel");
+    const psPhoto = document.getElementById("psPhoto");
     if (src) {
-      thumb.src = src; thumb.style.display = "block"; empty.style.display = "none";
+      thumb.src = src; thumb.style.display = "block";
+      emptyLabel.style.display = "none";
       psPhoto.src = src; psPhoto.style.display = "block";
     } else {
-      thumb.style.display = "none"; empty.style.display = "flex";
-      psPhoto.style.display = "none"; psPhoto.src = "";
+      thumb.style.display = "none";
+      emptyLabel.style.display = "block";
+      psPhoto.style.display = "none";
     }
   }
 
-  /* =====================================================
-     DUPLICATE / UPDATE DETECTION
-     ===================================================== */
-  function checkExistingEmployee() {
-    const id = document.getElementById("empId").value.trim();
-    const btn = document.getElementById("btnSaveEmployee");
-    const matched = id && employeesDb.some(e => e.id.toLowerCase() === id.toLowerCase());
-    btn.textContent = matched ? "Update Employee Record" : "Save Employee Data";
-    btn.dataset.mode = matched ? "update" : "new";
+  // ===================================================================
+  // OTHER EARNINGS ROWS
+  // ===================================================================
+  function addEarningRow() {
+    currentEarnings.push({ label: "", amount: 0 });
+    renderEarningsRows();
   }
 
-  function liveRecalculate() {
-    const currentMockProfile = {
+  function updateEarningRow(idx, field, value) {
+    if (!currentEarnings[idx]) return;
+    currentEarnings[idx][field] = field === "amount" ? (parseFloat(value) || 0) : value;
+  }
+
+  function removeEarningRow(idx) {
+    currentEarnings.splice(idx, 1);
+    renderEarningsRows();
+    liveRecalculate();
+  }
+
+  function renderEarningsRows() {
+    const container = document.getElementById("earningsRowsContainer");
+    if (currentEarnings.length === 0) {
+      container.innerHTML = '<div class="earnings-empty">No additional earning lines added for this record.</div>';
+      return;
+    }
+    container.innerHTML = currentEarnings.map((row, idx) => `
+      <div class="earning-row">
+        <input type="text" placeholder="Label (e.g. 13th Month Pay)" value="${(row.label || '').replace(/"/g,'&quot;')}" oninput="updateEarningRow(${idx}, 'label', this.value); liveRecalculate()">
+        <input type="number" placeholder="Amount" value="${row.amount || 0}" step="0.01" oninput="updateEarningRow(${idx}, 'amount', this.value); liveRecalculate()">
+        <button type="button" class="btn-text" onclick="removeEarningRow(${idx})">Remove</button>
+      </div>
+    `).join("");
+  }
+
+  // ===================================================================
+  // PAY PERIOD (coverage + pay date)
+  // ===================================================================
+  function getLastDayOfMonth(year, monthIndex0) {
+    return new Date(year, monthIndex0 + 1, 0).getDate();
+  }
+
+  function computePayPeriod(year, monthIndex0, cutoff) {
+    const lastDay = getLastDayOfMonth(year, monthIndex0);
+    if (cutoff === "first") {
+      const payDay = Math.min(30, lastDay);
+      return {
+        coverageLabel: `${MONTH_NAMES[monthIndex0]} 1 – 15, ${year}`,
+        payDateLabel: `${MONTH_NAMES[monthIndex0]} ${payDay}, ${year}`
+      };
+    } else {
+      let nextMonthIndex = monthIndex0 + 1, nextYear = year;
+      if (nextMonthIndex > 11) { nextMonthIndex = 0; nextYear += 1; }
+      return {
+        coverageLabel: `${MONTH_NAMES[monthIndex0]} 16 – ${lastDay}, ${year}`,
+        payDateLabel: `${MONTH_NAMES[nextMonthIndex]} 15, ${nextYear}`
+      };
+    }
+  }
+
+  // ===================================================================
+  // LEDGER CALCULATIONS
+  // ===================================================================
+  function buildProfileFromForm() {
+    return {
       id: document.getElementById("empId").value || "—",
       fullName: document.getElementById("empFullName").value || "—",
       designation: document.getElementById("empDesignation").value || "—",
       department: document.getElementById("empDepartment").value || "—",
       bankNo: document.getElementById("empBankNo").value || "—",
       tin: document.getElementById("empTin").value || "—",
-      basicPay: parseFloat(document.getElementById("empBasicPay").value) || 0,
+      monthlyBasic: parseFloat(document.getElementById("empMonthlyBasic").value) || 0,
       transAllowance: parseFloat(document.getElementById("empTransAllowance").value) || 0,
       defaultAllowance: parseFloat(document.getElementById("empDefaultAllowance").value) || 0,
       dateStarted: document.getElementById("empDateStarted").value || "—",
-      status: document.getElementById("empStatus").value
+      status: document.getElementById("empStatus").value,
+      isMinimumWageEarner: document.getElementById("empIsMWE").value === "yes",
+      additionalEarnings: currentEarnings
     };
-    executeLedgerCalculations(currentMockProfile);
+  }
+
+  function liveRecalculate() {
+    executeLedgerCalculations(buildProfileFromForm());
   }
 
   /**
-   * PHILIPPINE LABOR CODE COMPLIANT CALCULATIONS MATRIX
-   * Evaluated on standard Semi-Monthly Deductions frameworks (TRAIN Law & Contribution Schedules).
-   * Note: Additional earnings (e.g. 13th month pay, bonus) are added to gross and, for
-   * simplicity, taxed the same way as regular pay here. Philippine tax rules actually
-   * exempt 13th month pay and certain bonuses up to a combined ₱90,000 threshold — this
-   * simplified matrix does not model that exemption, so treat the tax figure as an estimate
-   * and confirm exact statutory treatment with your accountant or BIR guidance.
+   * Semi-monthly withholding tax per BIR's revised withholding tax table
+   * (TRAIN Law, semi-monthly compensation range). Minimum wage earners are
+   * exempt from income tax on basic pay under RA 9504 / NIRC Sec. 24(A)(2)(b),
+   * though SSS/PhilHealth/Pag-IBIG contributions still apply. Allowances and
+   * other earnings (bonus, 13th month pay, etc.) are treated as non-taxable
+   * and excluded from the taxable base.
    */
+  function computeWithholdingTax(taxableIncome, isMWE) {
+    if (isMWE) {
+      return { tax: 0, bracketLabel: "Tax-Exempt — Minimum Wage Earner (RA 9504 / NIRC Sec. 24(A)(2)(b))" };
+    }
+    let tax = 0, bracketLabel = "";
+    if (taxableIncome <= 10417) {
+      tax = 0; bracketLabel = "0% — within tax-exempt bracket (₱10,417 and below)";
+    } else if (taxableIncome <= 16666) {
+      tax = (taxableIncome - 10417) * 0.15;
+      bracketLabel = "15% in excess of ₱10,417";
+    } else if (taxableIncome <= 33332) {
+      tax = 937.50 + (taxableIncome - 16667) * 0.20;
+      bracketLabel = "₱937.50 + 20% in excess of ₱16,667";
+    } else if (taxableIncome <= 83332) {
+      tax = 4270.83 + (taxableIncome - 33333) * 0.25;
+      bracketLabel = "₱4,270.83 + 25% in excess of ₱33,333";
+    } else if (taxableIncome <= 333332) {
+      tax = 16770.83 + (taxableIncome - 83333) * 0.30;
+      bracketLabel = "₱16,770.83 + 30% in excess of ₱83,333";
+    } else {
+      tax = 91770.83 + (taxableIncome - 333333) * 0.35;
+      bracketLabel = "₱91,770.83 + 35% in excess of ₱333,333";
+    }
+    return { tax: Math.max(0, tax), bracketLabel };
+  }
+
   function executeLedgerCalculations(emp) {
-    const basic = parseFloat(emp.basicPay) || 0;
+    const monthlyBasic = parseFloat(emp.monthlyBasic) || 0;
+    const semiBasic = monthlyBasic / 2;
+    const dailyRate = monthlyBasic / 26;
     const trans = parseFloat(emp.transAllowance) || 0;
     const allow = parseFloat(emp.defaultAllowance) || 0;
-    const extraTotal = computeExtraEarningsTotal();
+    const earnings = Array.isArray(emp.additionalEarnings) ? emp.additionalEarnings : [];
+    const earningsTotal = earnings.reduce((sum, r) => sum + (parseFloat(r.amount) || 0), 0);
 
-    renderExtraEarningsPreview();
+    const gross = semiBasic + trans + allow + earningsTotal;
 
-    const gross = basic + trans + allow + extraTotal;
-
-    const projectedMonthlyBasic = basic * 2;
-
-    let sssMonthlyCredit = Math.min(Math.max(projectedMonthlyBasic, 4250), 30000);
+    // Statutory contribution bands use the full monthly basic salary
+    let sssMonthlyCredit = Math.min(Math.max(monthlyBasic, 4250), 30000);
     let sssDeduction = (sssMonthlyCredit * 0.045) / 2;
 
-    let phMonthlyBase = Math.min(Math.max(projectedMonthlyBasic, 10000), 100000);
+    let phMonthlyBase = Math.min(Math.max(monthlyBasic, 10000), 100000);
     let philhealthDeduction = (phMonthlyBase * 0.025) / 2;
 
-    let hdmfMonthlyBase = Math.min(projectedMonthlyBasic, 10000);
+    let hdmfMonthlyBase = Math.min(monthlyBasic, 10000);
     let pagibigDeduction = (hdmfMonthlyBase * 0.02) / 2;
 
     const totalStatutory = sssDeduction + philhealthDeduction + pagibigDeduction;
 
-    const taxableIncome = Math.max(0, basic + extraTotal - totalStatutory);
-
-    let withholdingTax = 0;
-    if (taxableIncome <= 10417) {
-      withholdingTax = 0;
-    } else if (taxableIncome <= 16667) {
-      withholdingTax = (taxableIncome - 10417) * 0.15;
-    } else if (taxableIncome <= 33333) {
-      withholdingTax = 937.50 + (taxableIncome - 16667) * 0.20;
-    } else if (taxableIncome <= 83333) {
-      withholdingTax = 4270.83 + (taxableIncome - 33333) * 0.25;
-    } else if (taxableIncome <= 333333) {
-      withholdingTax = 16770.83 + (taxableIncome - 83333) * 0.30;
-    } else {
-      withholdingTax = 91770.83 + (taxableIncome - 333333) * 0.35;
-    }
+    // Taxable base = basic pay only; allowances & other earnings are non-taxable
+    const taxableIncome = Math.max(0, semiBasic - totalStatutory);
+    const taxResult = computeWithholdingTax(taxableIncome, !!emp.isMinimumWageEarner);
+    const withholdingTax = taxResult.tax;
 
     const totalDeductions = totalStatutory + withholdingTax;
     const netPay = gross - totalDeductions;
 
+    // Pay period
+    const monthIndex0 = parseInt(document.getElementById("payMonth").value, 10);
+    const year = parseInt(document.getElementById("payYear").value, 10) || new Date().getFullYear();
+    const cutoff = document.getElementById("payCutoff").value;
+    const pp = computePayPeriod(year, monthIndex0, cutoff);
+    document.getElementById("ppCoverage").textContent = pp.coverageLabel;
+    document.getElementById("ppPayDate").textContent = pp.payDateLabel;
+
+    // Header / info fields
     document.getElementById("viewId").textContent = emp.id;
     document.getElementById("viewStatus").textContent = emp.status;
     document.getElementById("viewStatus").style.color = emp.status === "Active" ? "var(--gold-deep)" : "var(--red)";
     document.getElementById("viewName").textContent = emp.fullName;
     document.getElementById("viewDesignation").textContent = emp.designation;
     document.getElementById("viewDepartment").textContent = emp.department;
-    document.getElementById("viewBank").textContent = emp.bankNo;
+    document.getElementById("viewBank").textContent = maskBankNumber(emp.bankNo);
     document.getElementById("viewTin").textContent = emp.tin;
     document.getElementById("viewDateStarted").textContent = emp.dateStarted || "—";
+    document.getElementById("viewDailyRate").textContent = "PHP " + formatCurrency(dailyRate);
 
-    document.getElementById("valBasic").textContent = formatCurrency(basic);
-    document.getElementById("valTrans").textContent = formatCurrency(trans);
-    document.getElementById("valAllow").textContent = formatCurrency(allow);
-    document.getElementById("valGross").textContent = formatCurrency(gross);
+    // Auto-computed compensation display fields
+    const semiDisplay = document.getElementById("empSemiBasicDisplay");
+    const dailyDisplay = document.getElementById("empDailyRateDisplay");
+    if (semiDisplay) semiDisplay.value = "PHP " + formatCurrency(semiBasic);
+    if (dailyDisplay) dailyDisplay.value = "PHP " + formatCurrency(dailyRate);
+
+    // Earnings table (basic / transportation / other allowance / dynamic rows / total)
+    const earningsBody = document.getElementById("earningsTableBody");
+    let earningsHtml = `
+      <tr><td>Basic Salary (Semi-Monthly Allocation)</td><td class="amt">${formatCurrency(semiBasic)}</td></tr>
+      <tr><td>Transportation Allowance</td><td class="amt">${formatCurrency(trans)}</td></tr>
+      <tr><td>Other Allowance</td><td class="amt">${formatCurrency(allow)}</td></tr>
+    `;
+    earnings.forEach(row => {
+      const label = row.label && row.label.trim() ? row.label.trim() : "Additional Earning";
+      earningsHtml += `<tr><td>${label}</td><td class="amt">${formatCurrency(parseFloat(row.amount) || 0)}</td></tr>`;
+    });
+    earningsHtml += `<tr class="total earn"><td>Gross Semi-Monthly Earnings</td><td class="amt">${formatCurrency(gross)}</td></tr>`;
+    earningsBody.innerHTML = earningsHtml;
 
     document.getElementById("valSss").textContent = formatCurrency(sssDeduction);
     document.getElementById("valPh").textContent = formatCurrency(philhealthDeduction);
     document.getElementById("valPibig").textContent = formatCurrency(pagibigDeduction);
     document.getElementById("valTax").textContent = formatCurrency(withholdingTax);
+    document.getElementById("valTaxBracket").textContent = "Tax basis: " + taxResult.bracketLabel;
     document.getElementById("valDeductions").textContent = formatCurrency(totalDeductions);
 
     document.getElementById("valNet").textContent = `PHP ${formatCurrency(netPay)}`;
+
+    return { gross, totalDeductions, netPay, withholdingTax, taxBracketLabel: taxResult.bracketLabel, pp, semiBasic, dailyRate };
   }
 
+  function maskBankNumber(bankNo) {
+    if (!bankNo) return "—";
+    const digitsOnly = bankNo.replace(/\D/g, "");
+    if (digitsOnly.length <= 4) return bankNo;
+    const last4 = digitsOnly.slice(-4);
+    return `•••• •••• ${last4}`;
+  }
+
+  // ===================================================================
+  // HISTORY
+  // ===================================================================
   function renderHistoryTrack(historyArr) {
     const container = document.getElementById("historyContainer");
     container.innerHTML = '';
@@ -1251,10 +1226,11 @@
     historyArr.slice().reverse().forEach(h => {
       const div = document.createElement("div");
       div.className = "history-item";
+      const periodLabel = h.coverageLabel ? `${h.coverageLabel} (Pay: ${h.payDateLabel || "—"})` : h.date;
       div.innerHTML = `
         <div class="h-main">
-          <div class="h-name">Pay Cycle Run: ${h.date}</div>
-          <div class="h-meta">Gross: ₱${formatCurrency(h.gross)} • Reductions: ₱${formatCurrency(h.deductions)}</div>
+          <div class="h-name">${periodLabel}</div>
+          <div class="h-meta">Gross: ₱${formatCurrency(h.gross)} • Reductions: ₱${formatCurrency(h.deductions)} • Saved: ${h.date}</div>
         </div>
         <div class="h-net">₱${formatCurrency(h.net)} Net</div>
       `;
@@ -1262,9 +1238,16 @@
     });
   }
 
-  /* =====================================================
-     SAVE / UPDATE (upsert by Employee ID — no duplicates)
-     ===================================================== */
+  // ===================================================================
+  // SAVE / UPDATE (with duplicate-safe upsert)
+  // ===================================================================
+  function updateSaveButtonLabel() {
+    const id = document.getElementById("empId").value.trim();
+    const btn = document.getElementById("btnSaveEmployee");
+    const exists = id && employeesDb.some(e => e.id.toLowerCase() === id.toLowerCase());
+    btn.textContent = exists ? "Update Employee Data" : "Save New Employee";
+  }
+
   function saveEmployeeData() {
     const id = document.getElementById("empId").value.trim();
     const fullName = document.getElementById("empFullName").value.trim();
@@ -1275,41 +1258,29 @@
       return;
     }
 
-    const basic = parseFloat(document.getElementById("empBasicPay").value) || 0;
-    const trans = parseFloat(document.getElementById("empTransAllowance").value) || 0;
-    const allow = parseFloat(document.getElementById("empDefaultAllowance").value) || 0;
-    const extraTotal = computeExtraEarningsTotal();
-
-    const projectedMonthlyBasic = basic * 2;
-    let sss = (Math.min(Math.max(projectedMonthlyBasic, 4250), 30000) * 0.045) / 2;
-    let ph = (Math.min(Math.max(projectedMonthlyBasic, 10000), 100000) * 0.025) / 2;
-    let pibig = (Math.min(projectedMonthlyBasic, 10000) * 0.02) / 2;
-    let taxable = Math.max(0, basic + extraTotal - (sss + ph + pibig));
-    let tax = 0;
-    if (taxable > 10417 && taxable <= 16667) tax = (taxable - 10417) * 0.15;
-    else if (taxable > 16667 && taxable <= 33333) tax = 937.50 + (taxable - 16667) * 0.20;
-    else if (taxable > 33333 && taxable <= 83333) tax = 4270.83 + (taxable - 33333) * 0.25;
-    else if (taxable > 83333 && taxable <= 333333) tax = 16770.83 + (taxable - 83333) * 0.30;
-    else if (taxable > 333333) tax = 91770.83 + (taxable - 333333) * 0.35;
-
-    const totalDeds = sss + ph + pibig + tax;
-    const gross = basic + trans + allow + extraTotal;
-    const net = gross - totalDeds;
-
-    const currentRunHistory = {
-      date: new Date().toISOString().split('T')[0],
-      gross: gross,
-      deductions: totalDeds,
-      net: net
-    };
+    const profile = buildProfileFromForm();
+    const calc = executeLedgerCalculations(profile);
 
     const matchedIndex = employeesDb.findIndex(e => e.id.toLowerCase() === id.toLowerCase());
     const isUpdate = matchedIndex !== -1;
 
-    const nameClashIndex = employeesDb.findIndex(e =>
+    // Warn (non-blocking) if the same full name already exists under a different ID
+    const nameMatch = employeesDb.findIndex(e =>
       e.fullName.trim().toLowerCase() === fullName.toLowerCase() && e.id.toLowerCase() !== id.toLowerCase()
     );
 
+    const currentRunHistory = {
+      date: new Date().toISOString().split('T')[0],
+      coverageLabel: document.getElementById("ppCoverage").textContent,
+      payDateLabel: document.getElementById("ppPayDate").textContent,
+      gross: calc.gross,
+      deductions: calc.totalDeductions,
+      net: calc.netPay,
+      tax: calc.withholdingTax,
+      taxBracket: calc.taxBracketLabel
+    };
+
+    const existingPhoto = isUpdate ? employeesDb[matchedIndex].photo : "";
     const payload = {
       id: id,
       fullName: fullName,
@@ -1317,18 +1288,19 @@
       department: document.getElementById("empDepartment").value.trim(),
       bankNo: document.getElementById("empBankNo").value.trim(),
       tin: document.getElementById("empTin").value.trim(),
-      basicPay: basic,
-      transAllowance: trans,
-      defaultAllowance: allow,
-      extraEarnings: extraEarnings.filter(e => e.name || e.amount).map(e => ({ name: e.name, amount: parseFloat(e.amount) || 0 })),
-      photo: currentPhotoBase64 || (isUpdate ? (employeesDb[matchedIndex].photo || "") : ""),
+      monthlyBasic: profile.monthlyBasic,
+      transAllowance: profile.transAllowance,
+      defaultAllowance: profile.defaultAllowance,
+      additionalEarnings: currentEarnings,
+      isMinimumWageEarner: profile.isMinimumWageEarner,
       dateStarted: document.getElementById("empDateStarted").value,
       status: status,
+      photo: currentPhotoBase64 || existingPhoto || "",
       history: []
     };
 
     if (isUpdate) {
-      payload.history = [...employeesDb[matchedIndex].history, currentRunHistory];
+      payload.history = [...(employeesDb[matchedIndex].history || []), currentRunHistory];
       employeesDb[matchedIndex] = payload;
     } else {
       payload.history.push(currentRunHistory);
@@ -1337,16 +1309,16 @@
 
     selectedEmployeeId = id;
 
-    // Sync with Google Sheets. The Apps Script web app should upsert by `id` — see the
-    // integration comment block at the top of this script for the expected behavior.
-    if (GOOGLE_SHEET_WEBAPP_URL && !GOOGLE_SHEET_WEBAPP_URL.includes(SHEET_URL_PLACEHOLDER)) {
+    // Sync with Google Sheets — the Apps Script backend is responsible for the
+    // actual upsert-by-ID (overwrite the matching row instead of appending).
+    if (GOOGLE_SHEET_WEBAPP_URL && !GOOGLE_SHEET_WEBAPP_URL.includes("YOUR_APPS_SCRIPT_WEBAPP_URL_HERE")) {
       fetch(GOOGLE_SHEET_WEBAPP_URL, {
         method: "POST",
         mode: "no-cors",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: isUpdate ? "update" : "write", data: payload })
+        body: JSON.stringify({ action: isUpdate ? "update" : "create", data: payload })
       }).then(() => {
-        showNotification(isUpdate ? "Existing record updated in Google Sheet." : "New record dispatched to Google Sheet.", "ok");
+        showNotification(isUpdate ? "Update dispatched to Google Sheet database file." : "New record dispatched to Google Sheet database file.", "ok");
       }).catch(() => {
         showNotification("Sheet delivery connection error. Preserved locally.", "err");
       });
@@ -1355,11 +1327,12 @@
     persistState();
     renderSystemViews();
     handleSelectFromDropdown(id);
+    updateSaveButtonLabel();
 
-    if (nameClashIndex !== -1) {
-      showNotification(`Saved. Note: "${fullName}" also exists under a different ID (${employeesDb[nameClashIndex].id}) — please verify this isn't an accidental duplicate.`, "err");
+    if (nameMatch !== -1) {
+      showNotification(`Saved. Note: another employee named "${fullName}" already exists under ID ${employeesDb[nameMatch].id} — please verify this isn't a duplicate.`, "warn");
     } else {
-      showNotification(isUpdate ? "Record updated safely in system directory schema." : "New record committed safely to system directory schema.", "ok");
+      showNotification(isUpdate ? "Existing record updated in place." : "New record committed to system directory.", "ok");
     }
   }
 
@@ -1370,20 +1343,21 @@
     const fields = ["empId", "empFullName", "empDesignation", "empDepartment", "empBankNo", "empTin", "empDateStarted"];
     fields.forEach(f => document.getElementById(f).value = "");
 
-    document.getElementById("empBasicPay").value = "0";
+    document.getElementById("empMonthlyBasic").value = "0";
     document.getElementById("empTransAllowance").value = "0";
     document.getElementById("empDefaultAllowance").value = "0";
     document.getElementById("empStatus").value = "Active";
+    document.getElementById("empIsMWE").value = "no";
 
-    extraEarnings = [];
-    renderExtraEarnings();
+    currentEarnings = [];
+    renderEarningsRows();
     clearPhoto();
 
     evaluateProfileAccessControl("Active");
-    checkExistingEmployee();
     liveRecalculate();
     renderHistoryTrack([]);
     renderSystemViews();
+    updateSaveButtonLabel();
   }
 
   function showNotification(msg, type) {
@@ -1394,32 +1368,8 @@
   }
 
   function formatCurrency(num) {
-    return parseFloat(num).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    return parseFloat(num || 0).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
   }
-
-  /* =====================================================
-     PRINT-TIME BANK ACCOUNT MASKING
-     Full number stays visible on screen for admin editing;
-     only the last 4 digits show on printed/PDF copies.
-     ===================================================== */
-  function maskBankNumber(str) {
-    const digits = (str || "").replace(/\D/g, "");
-    if (digits.length <= 4) return str || "—";
-    const last4 = digits.slice(-4);
-    return "•".repeat(digits.length - 4) + last4;
-  }
-
-  window.addEventListener("beforeprint", () => {
-    const bankEl = document.getElementById("viewBank");
-    bankEl.dataset.fullValue = bankEl.textContent;
-    bankEl.textContent = maskBankNumber(bankEl.textContent);
-  });
-  window.addEventListener("afterprint", () => {
-    const bankEl = document.getElementById("viewBank");
-    if (bankEl.dataset.fullValue !== undefined) {
-      bankEl.textContent = bankEl.dataset.fullValue;
-    }
-  });
 </script>
 </body>
 </html>
